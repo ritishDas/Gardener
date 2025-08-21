@@ -11,8 +11,6 @@
 
 - Declarative DOM creation via structured objects
 - Supports text insertion, attributes, event listeners, and nested children
-- Clean separation of concerns with helper functions
-- Replaces existing DOM nodes with newly constructed trees
 
 ---
 
@@ -22,12 +20,6 @@ Just include the script in your project:
 
 ```html
 <script src="gardener.js"></script>
-```
-
-Or import it into your module:
-
-```js
-import { gardener } from './gardener.js';
 ```
 
 ---
@@ -86,14 +78,7 @@ Main function that:
 
 ---
 
-## 🛠️ Tips
 
-- Class names should be passed as an array: `['btn', 'primary']`
-- Attributes are applied directly (e.g., `{ id: 'main', href: '#' }`)
-- Event handlers must be valid functions
-- Nest children deeply to build complex structures
-
----
 
 ## 📚 License
 
