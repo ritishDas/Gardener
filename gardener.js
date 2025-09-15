@@ -17,8 +17,11 @@ function insertText(element,text) {
   element.innerText = text;
 }
 
+function replaceElement(original, New) {
+  original.replaceWith(New);
+}
 
-function gardener(original,Dom) {
+function gardener(Dom) {
   
   let element = createElement(Dom.t,Dom.cn);
 
@@ -48,5 +51,5 @@ function gardener(original,Dom) {
 
 
 
-  original.replaceWith(element);
+  return element;
 }
