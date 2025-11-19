@@ -2,18 +2,18 @@ function fetchElement(param) {
   return document.querySelector(param);
 }
 
-function appendElement(parent,child) {
+function appendElement(parent, child) {
   parent.appendChild(child);
 }
 
-function createElement(type,classname) {
+function createElement(type, classname) {
   let element = document.createElement(type);
-  if(classname)
-  element.classList.add(...classname);
+  if (classname)
+    element.classList.add(...classname);
   return element;
 }
 
-function insertText(element,text) {
+function insertText(element, text) {
   element.innerText = text;
 }
 
@@ -28,9 +28,16 @@ function gardener(Dom) {
   ].includes(Dom.t);
 
   // create element accordingly
-  const element = isSVG
-    ? document.createElementNS('http://www.w3.org/2000/svg', Dom.t)
-    : createElement(Dom.t, Dom.cn);
+  let element;
+
+  if (isSVG) {
+    element = document.createElementNS('http://www.w3.org/2000/svg', Dom.t);
+    if (Dom.cn)
+      element.classList.add(...Dom.cn);
+  }
+  else {
+    element = createElement(Dom.t, Dom.cn);
+  }
 
   // text content (skip for SVG like <path>)
   if (Dom.txt) {
@@ -104,26 +111,26 @@ function parser(element) {
 
   console.log(obj);
   return obj
- //Let Browser do the migration from html to json and then use copy paste
+  //Let Browser do the migration from html to json and then use copy paste
 }
 
-  function imagePreloader(images) {
-      const body = fetchElement('body')
-    images.forEach(entry => {
-          appendElement(body, gardener({
-            t:'img',
-            cn:['preloaderimage'],
-            attr:{
-            src:entry,
-            alt:entry
-            }
-          }));
+function imagePreloader(images) {
+  const body = fetchElement('body')
+  images.forEach(entry => {
+    appendElement(body, gardener({
+      t: 'img',
+      cn: ['preloaderimage'],
+      attr: {
+        src: entry,
+        alt: entry
+      }
+    }));
 
-          setTimeout(()=>{
-          const images = document.querySelectorAll('.preloaderimage');
-          images.forEach(entry => {entry.style.display = 'none'});
-          }, 0)
+    setTimeout(() => {
+      const images = document.querySelectorAll('.preloaderimage');
+      images.forEach(entry => { entry.style.display = 'none' });
+    }, 0)
 
-    })
-  }
+  })
+}
 
