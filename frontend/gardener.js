@@ -1,66 +1,101 @@
 const config = {
   mode: 'dev',
-  componentdir: './components/'
+  componentdir: 'frontend/components/',
+  hotreload: true
 }
 
 let hotReloadtimeout;
-
-let hotReload = true;
 const body = fetchElement('body');
+let hotReload = localStorage.getItem('hotreload');
+
+if (hotReload === null) hotReload = config.hotreload;
+else if (hotReload === 'true') hotReload = true
+else if (hotReload === 'false') hotReload = false
+
 if (config.mode === 'dev') {
   appendElement(body, gardener({
-    t: 'form',
-    attr: {
-      id: 'hrcheckbox',
-    },
-    events: {
-      click: () => togglehotreload()
-    },
-    cn: ['rounded-full', 'p-5', 'bg-red-300', 'fixed', 'right-10', 'bottom-10', 'z-100'],
-    children: [{
-      t: 'label',
-      txt: 'Hot Reload ',
-    }
-      , {
-      t: 'input',
-      attr: {
-        type: 'checkbox'
+    t: 'p',
+    cn: ['bg-gray-200', 'fixed', 'bottom-0', 'z-100', 'right-0', 'border-b-1', 'p-2', 'rounded-md'],
+    children: [
+      {
+        t: 'span',
+        txt: 'Press '
+      },
+      {
+        t: 'span',
+        cn: ['text-green-500', 'font-bold'],
+        txt: 'Ctrl+h'
+      },
+      {
+        t: 'span',
+        txt: ' to toggle Hot Reload'
+      },
+      {
+        t: 'form',
+        attr: {
+          id: 'hrcheckbox',
+        },
+        events: {
+          click: () => togglehotreload()
+        },
+        cn: ['p-2', 'bg-red-300'],
+        children: [{
+          t: 'label',
+          txt: 'Hot Reload ',
+        }
+          , {
+          t: 'input',
+          cn: ['hrcheckbox'],
+          attr: {
+            type: 'checkbox'
+          }
+        }]
       }
-    }]
+    ]
   }))
+
+  //appendElement(body, gardener())
 }
 
-togglehotreload();
-document.addEventListener('keydown', function(e) {
-  // Detect Ctrl + H
-  if (e.ctrlKey && e.key.toLowerCase() === 'h') {
-    e.preventDefault();   // Stop browser from opening history
-    // Your logic here...
-    togglehotreload();
-  }
-});
+if (config.mode === 'dev') {
+  togglehotreload();
+  document.addEventListener('keydown', function(e) {
+    // Detect Ctrl + H
+    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+      e.preventDefault();   // Stop browser from opening history
+      // Your logic here...
+      togglehotreload();
+    }
+  });
+}
 
 function togglehotreload() {
   const hr = hotReload;
   const hrcheck = fetchElement('#hrcheckbox');
-  console.log(hrcheck.children[1].value)
+
+  localStorage.setItem('hotreload', hr);
+
+  hotReload = !hotReload;
 
   if (hr) {
-    hrcheck.style.background = 'green';
-    hrcheck.children[1].checked = true;
+    hrcheck.style.background = '#66e666';
+    fetchElement('.hrcheckbox').checked = true;
+    localStorage.setItem('hotreload', 'true');
     hotReloadtimeout = setTimeout(() => window.location.reload(), 1000);
   }
   else {
     hrcheck.style.background = 'red';
-    hrcheck.children[1].checked = false;
+    fetchElement('.hrcheckbox').checked = false;
+    localStorage.setItem('hotreload', 'false');
     clearTimeout(hotReloadtimeout);
   }
 
-  hotReload = !hotReload;
+  //localStorage.setItem('hotreload', hotReload);
 }
 
 export function parserWindow(text) {
-  body.addEventListener('keypress', function(event) {
+  if (config.mode !== 'dev') return;
+  body.addEventListener('keydown', function(event) {
     if (event.key.toLowerCase() === 'y')
       copytxt();
   });
@@ -68,11 +103,11 @@ export function parserWindow(text) {
 
   const result = gardener({
     t: 'div',
-    cn: ['fixed', 'border-2', 'border-black', 'bg-gray-500', 'text-white', 'rounded-lg', 'z-90', 'w-2/4', 'h-3/4', 'left-1/4', 'flex', 'flex-col', 'justify-between'],
+    cn: ['fixed', 'border-2', 'border-black', 'bg-gray-500', 'text-white', 'rounded-lg', 'z-90', 'w-2/4', 'h-2/4', 'left-1/4', 'flex', 'flex-col', 'justify-between', 'top-1/4'],
     children: [
       {
         t: 'div',
-        cn: ['bg-gray-200', 'h-10', 'text-black', 'rounded-t-lg', 'flex', 'items-center', 'justify-around'],
+        cn: ['bg-gray-200', 'h-15', 'text-black', 'rounded-t-lg', 'flex', 'items-center', 'justify-around'],
         children: [
           {
             t: 'h3',
@@ -81,8 +116,8 @@ export function parserWindow(text) {
           },
           {
             t: 'button',
-            cn: ['w-20', 'bg-red-300', 'rounded-lg', 'cursor-pointer'],
-            txt: 'Copy',
+            cn: ['p-2', 'bg-red-300', 'rounded-lg', 'cursor-pointer'],
+            txt: 'Add Component',
             attr: {
               id: 'copybtn'
             },
@@ -94,7 +129,7 @@ export function parserWindow(text) {
       },
       {
         t: 'p',
-        cn: ['p-5'],
+        cn: ['p-5', 'overflow-scroll'],
         txt: text
       },
       {
@@ -112,7 +147,7 @@ export function parserWindow(text) {
           },
           {
             t: 'span',
-            txt: ' to copy'
+            txt: ' to add this component'
           }
         ]
       }
@@ -120,11 +155,6 @@ export function parserWindow(text) {
   })
 
   function copytxt() {
-    console.log('clicked')
-    //copyText(text);
-    const btn = fetchElement('#copybtn');
-    insertText(btn, 'Copied');
-    btn.style.background = '#66e666';
     result.remove()
 
     const compform = gardener({
@@ -136,7 +166,7 @@ export function parserWindow(text) {
           compform.remove();
         }
       },
-      cn: ['fixed', 'w-1/5', 'left-2/5', 'bg-gray-500', 'rounded-lg', 'p-10', 'block'],
+      cn: ['fixed', 'left-2/5', 'bg-gray-500', 'rounded-lg', 'block', 'top-2/5', 'p-2'],
       children: [
         {
           t: 'input',
@@ -162,7 +192,7 @@ export function parserWindow(text) {
 async function copyText(txt, path) {
   // await navigator.clipboard.writeText(txt);
   try {
-    const res = await fetch('/', {
+    const res = await fetch('/addcomponent', {
       method: 'POST',
       headers: {
         "Content-Type": 'application/json'
@@ -173,7 +203,6 @@ async function copyText(txt, path) {
     if (!res.ok) console.error('wrong');
 
     const data = await res.json()
-    console.log(data);
 
   }
   catch (err) {
@@ -209,6 +238,8 @@ export function replaceElement(original, New) {
 }
 
 export function gardener(Dom) {
+
+  if (Dom.nodeType === 1) return Dom;
   // detect if this is an SVG element
   const isSVG = [
     'svg', 'path', 'circle', 'rect', 'line', 'polygon', 'polyline', 'g', 'defs', 'clipPath', 'use'
@@ -233,7 +264,7 @@ export function gardener(Dom) {
 
   // apply attributes safely
   const propertyNames = new Set([
-    'value', 'checked', 'selected', 'muted', 'disabled',
+    'value', 'selected', 'muted', 'disabled',
     'selectedIndex', 'volume', // etc.
   ]);
 
@@ -292,7 +323,6 @@ export function parser(element, isParent) {
     obj.txt = element.textContent.trim();
 
     if (isParent) {
-      console.log('parent')
       parserWindow(JSON.stringify(obj))
     }
 
@@ -307,6 +337,9 @@ export function parser(element, isParent) {
   if (children.length) obj.children = children;
 
 
+  if (isParent) {
+    parserWindow(JSON.stringify(obj))
+  }
 
   return obj
   //Let Browser do the migration from html to json and then use copy paste

@@ -3,14 +3,20 @@ import sharp from 'sharp';
 import path from 'path';
 import fs from "fs";
 import fsp from "fs/promises";
+import task from './task.js';
 
 const app = express();
 const availableCache = {};
 
+app.set('view engine', 'ejs');
 app.use(express.static('./'));
 app.use(express.json());
 
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
+  res.render('home');
+})
+
+app.post('/addcomponent', (req, res) => {
   try {
     const { path, component } = req.body;
 
@@ -41,7 +47,7 @@ app.get('/img/:name/:width/:height', async (req, res) => {
       return res.status(400).json({ error: 'Invalid width or height' });
     }
 
-    const inputPath = path.join(process.cwd(), 'assets', name);
+    const inputPath = path.join(process.cwd(), 'frontend/assets', name);
     const cacheKey = `${name}_${width}x${height}`;
     const cacheDir = path.join(process.cwd(), '.cache');
     const outputPath = path.join(cacheDir, `${path.parse(name).name}_${width}x${height}.webp`);
@@ -91,4 +97,5 @@ async function generateWebP(inputPath, outputPath, width, height) {
   console.log('✅ Image successfully generated');
 }
 
-app.listen(3000, () => { console.log('server listening 🚀🚀🚀') });
+const PORT = 3000
+app.listen(PORT, () => { console.log('server listening 🚀🚀🚀 PORT:', 3000) });
