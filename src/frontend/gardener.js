@@ -1,6 +1,6 @@
 const config = {
   mode: 'dev',
-  componentdir: 'frontend/components/',
+  componentdir: 'components/',
   hotreload: true
 }
 
@@ -203,6 +203,7 @@ async function copyText(txt, path) {
     if (!res.ok) console.error('wrong');
 
     const data = await res.json()
+    console.log(data);
 
   }
   catch (err) {
