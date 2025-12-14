@@ -89,7 +89,8 @@ async function generateWebP(inputPath, outputPath, width, height) {
 
   await sharp(inputPath)
     .resize(width, height, {
-      fit: 'cover'
+            fit: 'inside',
+      withoutEnlargement: true
     })
     .webp({ quality: 80 })
     .toFile(outputPath);
