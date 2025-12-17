@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Gardener</title>
+  </head>
+  <body>
+    <div id='body'>
+      <%- include('partials/loader') %>
+      <%- include('partials/navbar') %>
+      <div class="hero flex justify-around items-center p-5 h-[90vh]">
+        <p class='p-5'>
+          Gardener is a front-end library for creating and manipulating DOM elements using a declarative JavaScript object syntax. It includes a development server with features like hot-reloading and on-the-fly component creation from existing HTML. The server also provides dynamic image resizing and caching.
+        </p>
+        <img src="/img/gardener.jpg/500/500" alt="logo" class="w-500">
+      </div>
+
+    </div>
+    <script src='global.js' type="module"></script>
+    <script src='home.js' type="module"></script>
+  </body>
+</html>
