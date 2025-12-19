@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"tsc -w\" \"pnpm tailwindcss -i ./src/frontend/tailwind.css -o ./src/frontend/style.css --watch\" \"nodemon\""
+    "dev": "concurrently \"tsx watch src/backend/server.ts\" \"tailwindcss -w -i src/frontend/tailwind.css -o src/frontend/style.css\""
   },
   "keywords": [],
   "author": "ritishDas",
@@ -26,7 +26,7 @@
     "@types/node": "^25.0.2",
     "@types/pg": "^8.16.0",
     "concurrently": "^9.2.1",
-    "nodemon": "^3.1.11",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

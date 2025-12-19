@@ -4,12 +4,11 @@ import path from "path";
 import fsp from "fs/promises";
 import generateWebP from "../libs/generateWebp.js";
 import { fileURLToPath } from "url";
-import { initDB } from '../db.js'
-initDB()
+const availableCache: Record<string, boolean> = {};
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const availableCache: Record<string, boolean> = {};
 
 interface AddComponentBody {
   path: string;
@@ -27,7 +26,7 @@ export default function(){
   return gardener(${component})
 }`;
 
-    fs.writeFileSync(path.join(__dirname, '../../src/frontend', filePath), filecontent, "utf8");
+    fs.writeFileSync(`./src/frontend/${filePath}`, filecontent, "utf8");
 
     res.json({ success: true });
   } catch (err) {
@@ -47,10 +46,10 @@ export async function imageOptimiser(req: Request, res: Response) {
       return res.status(400).json({ error: "Invalid width or height" });
     }
 
-    const inputPath = path.join(__dirname, '../../src/frontend/assets', name);
+    const inputPath = `./src/frontend/assets/${name}`;
 
     const cacheKey = `${name}_${width}x${height}`;
-    const cacheDir = path.join(__dirname, "../../.cache");
+    const cacheDir = path.join(__dirname, "../.cache");
 
     const outputPath = path.join(
       cacheDir,

@@ -1,6 +1,6 @@
 const config = {
   mode: 'dev',
-  componentdir: 'components/',
+  componentdir: 'components',
   hotreload: true
 }
 
