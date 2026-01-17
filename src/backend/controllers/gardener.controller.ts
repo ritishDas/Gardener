@@ -1,0 +1,103 @@
+import type { Request, Response } from "express";
+import fs, { readFile, readFileSync } from "fs";
+import path from "path";
+import fsp from "fs/promises";
+import generateWebP from "../libs/generateWebp.js";
+import { fileURLToPath } from "url";
+const availableCache: Record<string, boolean> = {};
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+interface AddComponentBody {
+  path: string;
+  component: string;
+}
+
+export function addComponent(req: Request<{}, {}, AddComponentBody>, res: Response) {
+  try {
+    const { path: filePath, component } = req.body;
+
+    const filecontent = `
+import {gardener} from '../gardener.js'
+
+export default function(){
+  return gardener(${component})
+}`;
+
+    fs.writeFileSync(`./src/frontend/${filePath}`, filecontent, "utf8");
+
+    res.json({ success: true });
+  } catch (err) {
+    const error = err as Error;
+    res.json({ success: false, msg: error.message });
+  }
+}
+
+export async function imageOptimiser(req: Request, res: Response) {
+  try {
+    const { name } = req.params;
+    if (!name) return;
+    const width = Number(req.params.width);
+    const height = Number(req.params.height);
+
+    if (!Number.isInteger(width) || !Number.isInteger(height)) {
+      return res.status(400).json({ error: "Invalid width or height" });
+    }
+
+    const inputPath = `./src/frontend/assets/${name}`;
+
+    const cacheKey = `${name}_${width}x${height}`;
+    const cacheDir = path.join(__dirname, "../.cache");
+
+    const outputPath = path.join(
+      cacheDir,
+      `${path.parse(name).name}_${width}x${height}.webp`
+    );
+
+    // If cached → serve
+    try {
+      await fsp.access(outputPath);
+      return res.sendFile(path.basename(outputPath), {
+        root: path.dirname(outputPath),
+      });
+    } catch {
+      // not cached
+    }
+
+    // Ensure input exists
+    await fsp.access(inputPath);
+
+    await generateWebP(inputPath, outputPath, width, height);
+
+    availableCache[cacheKey] = true;
+
+    return res.sendFile(path.basename(outputPath), {
+      root: path.dirname(outputPath),
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Image processing failed" });
+  }
+}
+
+export async function addPage(req: Request, res: Response) {
+  try {
+    const pagename: string = req.body.page;
+    const buffer = readFileSync('./src/backend/frontendtemplate.ejs', 'utf8');
+    const name = pagename.replaceAll('/', '_');
+
+    fs.writeFileSync(`./src/frontend/views/${name}.ejs`, buffer, "utf8");
+
+    fs.appendFileSync('./src/backend/routes/gardener.route.ts', ` router.route("${pagename}").get((req, res) => res.render("${name}"))\n `);
+
+    res.json({ success: true });
+  }
+  catch (err) {
+    const error = err as Error;
+    res.json({ success: false, msg: error.message });
+  }
+
+}
+
