@@ -15,14 +15,17 @@ app.use(express.json());
 app.use(frontendRoute);
 
 const PORT = 3000;
+//
+// initDB().then(
+//   () => {
+//     app.listen(PORT, () => {
+//       console.log("server listening 🚀🚀🚀 PORT:", PORT);
+//     });
+//   }
+// )
 
-initDB().then(
-  () => {
-    app.listen(PORT, () => {
-      console.log("server listening 🚀🚀🚀 PORT:", PORT);
-    });
-  }
-)
-
+app.listen(PORT, () => {
+  console.log("server listening 🚀🚀🚀 PORT:", PORT);
+});
 
 
