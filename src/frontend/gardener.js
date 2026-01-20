@@ -67,9 +67,8 @@ if (config.mode === 'dev') {
   });
 
   appendElement(body, addPagebtn);
-}
 
-if (config.mode === 'dev') {
+
   appendElement(body, gardener({
     t: 'p',
     cn: ['bg-gray-200', 'fixed', 'bottom-0', 'z-100', 'right-0', 'border-b-1', 'p-2', 'rounded-md'],
@@ -112,9 +111,8 @@ if (config.mode === 'dev') {
   }))
 
   //appendElement(body, gardener())
-}
 
-if (config.mode === 'dev') {
+
   togglehotreload();
   document.addEventListener('keydown', function(e) {
     // Detect Ctrl + H
