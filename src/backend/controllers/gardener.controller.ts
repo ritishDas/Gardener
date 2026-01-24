@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import fs, { readFile, readFileSync } from "fs";
 import path from "path";
+import ejs from "ejs";
 import fsp from "fs/promises";
 import generateWebP from "../libs/generateWebp.js";
 import { fileURLToPath } from "url";
@@ -35,50 +36,65 @@ export default function(){
   }
 }
 
+
 export async function imageOptimiser(req: Request, res: Response) {
   try {
     const { name } = req.params;
-    if (!name) return;
-    const width = Number(req.params.width);
-    const height = Number(req.params.height);
 
-    if (!Number.isInteger(width) || !Number.isInteger(height)) {
-      return res.status(400).json({ error: "Invalid width or height" });
+    if (!name) return;
+    // name format: test_500x300.webp
+    const match = name.match(/^(.+?)_(\d+)x(\d+)\.webp$/);
+
+    if (!match) {
+      return res.status(400).json({ error: "Invalid image format" });
     }
 
-    const inputPath = `./src/frontend/assets/${name}`;
+    const [, baseName, widthStr, heightStr] = match;
 
-    const cacheKey = `${name}_${width}x${height}`;
-    const cacheDir = path.join(__dirname, "../.cache");
+    if (!widthStr || !heightStr) return;
+    const width = parseInt(widthStr, 10);
+    const height = parseInt(heightStr, 10);
 
-    const outputPath = path.join(
-      cacheDir,
-      `${path.parse(name).name}_${width}x${height}.webp`
-    );
+    const cacheDir = path.join(__dirname, "../cache");
+    await fsp.mkdir(cacheDir, { recursive: true });
 
-    // If cached → serve
+    const outputPath = path.join(cacheDir, name);
+
+    // 1️⃣ Return cached file if exists
     try {
       await fsp.access(outputPath);
       return res.sendFile(path.basename(outputPath), {
         root: path.dirname(outputPath),
       });
     } catch {
-      // not cached
+      // not cached → continue
     }
 
-    // Ensure input exists
-    await fsp.access(inputPath);
+    // 2️⃣ Find source image with same base name
+    const assetsDir = path.resolve("./src/frontend/assets");
+    const files = await fsp.readdir(assetsDir);
 
+    const sourceFile = files.find((file) => {
+      const parsed = path.parse(file);
+      return parsed.name === baseName;
+    });
+
+    if (!sourceFile) {
+      return res.status(404).json({ error: "Source image not found" });
+    }
+
+    const inputPath = path.join(assetsDir, sourceFile);
+
+    // 3️⃣ Generate optimized WebP
     await generateWebP(inputPath, outputPath, width, height);
 
-    availableCache[cacheKey] = true;
-
+    // 4️⃣ Return generated file
     return res.sendFile(path.basename(outputPath), {
       root: path.dirname(outputPath),
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Image processing failed" });
+    return res.status(500).json({ error: "Image optimisation failed" });
   }
 }
 
@@ -101,3 +117,85 @@ export async function addPage(req: Request, res: Response) {
 
 }
 
+
+export async function createStatic(req: Request, res: Response) {
+  try {
+    const viewsDir = path.resolve("src/frontend/views");
+    const outDir = path.resolve("src/tempfrontend");
+    const finalOut = path.resolve("src/frontendStatic");
+
+    const otherAssets = path.resolve("src/frontend");
+    await fsp.mkdir(outDir, { recursive: true });
+
+    const entries2 = await fsp.readdir(otherAssets, { withFileTypes: true });
+    const entries = await fsp.readdir(viewsDir, { withFileTypes: true });
+
+    const rendered: string[] = [];
+
+    for (const entry of entries2) {
+      if (!entry.isFile()) continue;
+      const srcPath = path.join(otherAssets, entry.name);
+      const outputPath = path.join(finalOut, entry.name);
+
+      await fsp.copyFile(srcPath, outputPath);
+
+    }
+
+    for (const entry of entries) {
+      // skip folders (partials, layouts, etc.)
+      if (!entry.isFile()) continue;
+      if (!entry.name.endsWith(".ejs")) continue;
+
+      const inputPath = path.join(viewsDir, entry.name);
+      const outputName = entry.name.replace(/\.ejs$/, ".html");
+      const outputPath = path.join(outDir, outputName);
+
+      const html = await ejs.renderFile(
+        inputPath,
+        {
+        },
+        {
+          // async: true,
+          views: [viewsDir], // needed for includes
+        }
+      );
+
+      await fsp.writeFile(outputPath, html, "utf8");
+      rendered.push(outputName);
+    }
+
+    const entries3 = await fsp.readdir(outDir, { withFileTypes: true });
+    for (const entry of entries3) {
+
+      // "_path1_path2_path3.html" -> ["path1", "path2", "path3"]
+      const parts = entry.name
+        .replace(/^_/, "")
+        .replace(/\.html$/, "")
+        .split("_");
+
+      const targetDir = path.join(finalOut, ...parts);
+      const targetFile = path.join(targetDir, "index.html");
+
+      // ensure directories exist
+      await fsp.mkdir(targetDir, { recursive: true });
+      console.log('done');
+      // copy file
+      await fsp.copyFile(path.join(outDir, entry.name), targetFile);
+
+    }
+    await fsp.rm(outDir, { recursive: true, force: true });
+    await fsp.cp(
+      path.resolve("src/backend/cache"),
+      path.join(finalOut, 'cache'),
+      { recursive: true }
+    );
+    return res.json({
+      success: true,
+      generated: rendered,
+      outDir,
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Static build failed" });
+  }
+}

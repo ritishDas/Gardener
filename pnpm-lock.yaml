@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@types/ejs':
+        specifier: ^3.1.5
+        version: 3.1.5
       dotenv:
         specifier: ^17.2.3
         version: 17.2.3
@@ -352,6 +355,9 @@ packages:
 
   '@types/connect@3.4.38':
     resolution: {integrity: sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==}
+
+  '@types/ejs@3.1.5':
+    resolution: {integrity: sha512-nv+GSx77ZtXiJzwKdsASqi+YQ5Z7vwHsTP0JY2SiQgjGckkBRKZnk8nIM+7oUZ1VCtuTz0+By4qVR7fqzp/Dfg==}
 
   '@types/express-serve-static-core@5.1.0':
     resolution: {integrity: sha512-jnHMsrd0Mwa9Cf4IdOzbz543y4XJepXrbia2T4b6+spXC2We3t1y6K44D3mR8XMFSXMCf3/l7rCgddfx7UNVBA==}
@@ -1060,6 +1066,8 @@ snapshots:
   '@types/connect@3.4.38':
     dependencies:
       '@types/node': 25.0.2
+
+  '@types/ejs@3.1.5': {}
 
   '@types/express-serve-static-core@5.1.0':
     dependencies:

@@ -37,7 +37,7 @@ pnpm install
 ```
 
 
-3. Initialize database & run server (development)
+2. Initialize database & run server (development)
 
 - Start the dev server (it runs the TypeScript server via tsx and watches Tailwind):
 
@@ -56,7 +56,7 @@ Base URL: http://localhost:3000
    - Renders the home EJS view.
 
 
-3. GET /img/:name/:width/:height  
+2. GET /img/:name/:width/:height  
    - Dynamic image resizing endpoint.
    - Parameters:
      - name: filename under `src/frontend/assets` (e.g., `w.webp` or `logo.jpg`)
@@ -71,7 +71,7 @@ Base URL: http://localhost:3000
      - Uses sharp for resizing and conversion
      - Returns: image binary (webp) or 400/500 on error
 
-4. POST /addcomponent
+3. POST /addcomponent
    - Adds a new frontend component file to the project (development convenience).
    - Body (JSON):
      - path: string — path under `src/frontend/` where file will be written (e.g., `"components/MyComp.js"`)
@@ -92,7 +92,7 @@ Content-Type: application/json
 
    - Security note: This endpoint writes files to the repository — use only in trusted dev environments.
 
-5. POST /addpage
+4. POST /addpage
    - Creates a new EJS page from the template and appends a route to `src/backend/routes/gardener.route.ts`.
    - Body (JSON):
      - page: string — path you want to mount (e.g., `/my-new-page` or `/foo/bar`)

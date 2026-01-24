@@ -2,7 +2,6 @@
 import 'dotenv/config';
 import express from 'express';
 import frontendRoute from './routes/gardener.route.js'
-import { initDB } from './db.js';
 
 const app = express();
 
