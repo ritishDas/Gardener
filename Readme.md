@@ -1,34 +1,84 @@
-# Gardener
+# Gardener 🌱
 
-A small development toolkit and micro-framework to "grow" DOM elements from declarative JSON objects and to convert DOM elements to JSON. The project includes:
-- A dev server (Express + EJS) with endpoints to dynamically create pages/components and on-the-fly image resizing (Sharp).
-- A tiny frontend library (gardener.js) to build DOM using a JS object syntax and parse existing DOM elements back to JSON.
-- A PostgreSQL starter
+**Gardener** is a small development toolkit and micro-framework for building websites with **declarative DOM JSON**, server-rendered templates, and a **custom static site generation pipeline**.
 
+It is designed for developers who want:
+
+* full control over HTML structure
+* minimal abstractions
+* a fast local dev experience
+* a deterministic static output for production
+
+Gardener sits somewhere between a tiny framework and a build system.
 
 ---
 
-## Features
+## What Gardener Includes
 
-- gardener: declarative DOM builder (gardener.js)
-- parser: convert real DOM elements into JSON objects
-- Dynamic image resizing and caching via /img/:name/:width/:height (Sharp)
-- Endpoints to add components/pages at runtime (dev convenience)
-- Tailwind CSS for quick styling; EJS templating for simple server-rendered pages
+### Core
+
+* 🌿 **gardener.js** — declarative DOM builder using JSON objects
+* 🔁 **parser** — convert real DOM elements back into gardener-compatible JSON
+* 📄 **EJS** for simple server-rendered views
+* 🎨 **Tailwind CSS** for fast styling
+
+### Dev Server
+
+* Express-based development server
+* Hot reload toggle (Ctrl + H)
+* Endpoints to create pages and components at runtime (dev convenience)
+
+### Images
+
+* Deterministic image optimization endpoint
+* Sharp-powered resize + WebP conversion
+* Filesystem cache reused during static builds
+
+### Static Site Generation (SSG)
+
+* Render EJS views into HTML
+* Convert route-encoded filenames into nested directories
+* Merge frontend assets and image cache
+* Clean temporary build artifacts
+* Produce a deployable static directory
+
+---
+
+## Project Structure
+
+```
+src/
+├── backend/
+│   ├── routes/
+│   ├── controllers/
+│   ├── libs/
+│   ├── cache/              # generated image cache (build artifact)
+│   └── server.ts
+│
+├── frontend/
+│   ├── views/              # EJS templates (source)
+│   ├── assets/             # original images
+│   ├── components/
+│   ├── gardener.js
+│   └── styles/
+│
+├── frontendStatic/          # final static output (generated)
+└── tempfrontend/            # temporary build output (deleted after build)
+```
 
 ---
 
 ## Requirements
 
-- Node.js (v16+ recommended)
-- pnpm (recommended) or npm
-- Optional: Git
+* Node.js v16+ (v18+ recommended)
+* pnpm (recommended) or npm
+* Optional: PostgreSQL
 
 ---
 
-## Quickstart (Dev)
+## Quickstart (Development)
 
-1. Clone and install
+### 1. Install
 
 ```bash
 git clone https://github.com/ritishDas/Gardener.git
@@ -36,91 +86,145 @@ cd Gardener
 pnpm install
 ```
 
-
-2. Initialize database & run server (development)
-
-- Start the dev server (it runs the TypeScript server via tsx and watches Tailwind):
+### 2. Run dev server
 
 ```bash
 pnpm run dev
 ```
 
-- Server listens on: http://localhost:3000
-
-
-## API Reference
-
-Base URL: http://localhost:3000
-
-1. GET /  
-   - Renders the home EJS view.
-
-
-2. GET /img/:name/:width/:height  
-   - Dynamic image resizing endpoint.
-   - Parameters:
-     - name: filename under `src/frontend/assets` (e.g., `w.webp` or `logo.jpg`)
-     - width: integer width (px)
-     - height: integer height (px)
-   - Example:
-     - <code>GET /img/w.webp/500/500</code>
-   - Behavior:
-     - Validates width/height
-     - Reads `src/frontend/assets/:name`
-     - Produces a WebP with requested size into `src/backend/.cache/` and serves it
-     - Uses sharp for resizing and conversion
-     - Returns: image binary (webp) or 400/500 on error
-
-3. POST /addcomponent
-   - Adds a new frontend component file to the project (development convenience).
-   - Body (JSON):
-     - path: string — path under `src/frontend/` where file will be written (e.g., `"components/MyComp.js"`)
-     - component: string — JS code content to write (controller wraps this content into a gardener export)
-   - Example request:
-
-```http
-POST /addcomponent
-Content-Type: application/json
-
-{
-  "path": "components/MyComp.js",
-  "component": "{ t: 'div', txt: 'Hello from MyComp' }"
-}
-```
-
-   - Response: JSON { success: true } or { success: false, msg }
-
-   - Security note: This endpoint writes files to the repository — use only in trusted dev environments.
-
-4. POST /addpage
-   - Creates a new EJS page from the template and appends a route to `src/backend/routes/gardener.route.ts`.
-   - Body (JSON):
-     - page: string — path you want to mount (e.g., `/my-new-page` or `/foo/bar`)
-   - Example:
-
-```http
-POST /addpage
-Content-Type: application/json
-
-{ "page": "/newpage" }
-```
-
-   - The controller:
-     - Copies `src/backend/frontendtemplate.ejs` to `src/frontend/views/<page_name>.ejs` (slashes replaced)
-     - Appends a `router.route("...").get((req,res)=>res.render("..."))` line to gardener.route.ts
-   - Response: { success: true } or { success: false, msg }
-
-   - Security note: This also mutates server-side routes; intended for local dev only.
+* Server runs at **[http://localhost:3000](http://localhost:3000)**
+* Tailwind watcher and TypeScript server run together
 
 ---
 
-## Frontend: gardener.js (developer API)
+## Image Optimization & Caching
 
-File: `src/frontend/gardener.js`. Primary exported/available functions in browser:
+Gardener provides a **deterministic image optimization endpoint**.
 
-- gardener(obj)
-  - Create DOM element(s) from a JSON description.
-  - Example:
+### Route
+
+```
+GET /cache/:name
+```
+
+### Filename format
+
+```
+<basename>_<width>x<height>.webp
+```
+
+### Example
+
+```http
+GET /cache/hero_500x300.webp
+```
+
+HTML usage:
+
+```html
+<img src="/cache/hero_500x300.webp" alt="hero" />
+```
+
+---
+
+### How it works
+
+1. Parses filename to extract:
+
+   * base name
+   * width
+   * height
+2. Checks cache:
+
+   ```
+   src/backend/cache/
+   ```
+3. If cached → return immediately
+4. If not cached:
+
+   * Finds source image in:
+
+     ```
+     src/frontend/assets/
+     ```
+   * Resizes and converts to WebP (Sharp)
+   * Stores result in cache
+5. Serves the optimized image
+
+---
+
+### Static Build Integration
+
+During static generation:
+
+* All cached images under:
+
+  ```
+  src/backend/cache/
+  ```
+
+  are copied into:
+
+  ```
+  src/frontendStatic/
+  ```
+
+Static HTML can safely reference:
+
+```html
+<img src="/cache/hero_500x300.webp" />
+```
+
+No runtime image processing is required in production.
+
+---
+
+## Static Site Generation
+
+Gardener includes a custom static build pipeline.
+
+### What it does
+
+1. Renders EJS views into HTML
+2. Writes temporary files using route-encoded filenames
+   (example: `_blog_posts_hello.html`)
+3. Converts them into directory-based routes:
+
+   ```
+   blog/posts/hello/index.html
+   ```
+4. Copies frontend assets
+5. Copies image cache
+6. Deletes temporary build directory
+
+### Output
+
+```
+src/frontendStatic/
+├── index.html
+├── blog/
+│   └── posts/
+│       └── hello/
+│           └── index.html
+├── assets/
+└── cache/
+```
+
+This directory is ready for:
+
+* static hosting
+* CDN deployment
+* Nginx / Caddy / Netlify / Vercel
+
+---
+
+## Frontend API — `gardener.js`
+
+File: `src/frontend/gardener.js`
+
+### `gardener(obj)`
+
+Create DOM elements from JSON.
 
 ```js
 const el = gardener({
@@ -131,108 +235,115 @@ const el = gardener({
     { t: 'p', txt: 'Content' }
   ]
 });
+
 document.body.appendChild(el);
 ```
 
-- parser(elementOrHtmlString, isParent = true)
-  - Convert an existing DOM element into a JSON object that matches gardener's format.
-  - Example:
+---
+
+### `parser(elementOrHtml, isParent = true)`
+
+Convert DOM into gardener JSON.
 
 ```js
 const json = parser(document.querySelector('.hero'));
-console.log(JSON.stringify(json, null, 2));
+console.log(json);
 ```
-
-- parserWindow(text)
-  - In dev mode: opens a UI window to preview parsed JSON and offers a quick "add component" flow (press Y to add).
-
-- imagePreloader(images)
-  - Preloads images by appending hidden <img> tags for caching/early load.
-
-- Helper utilities:
-  - fetchElement(selector), appendElement(parent, child), createElement(type, classname), replaceElement(original, newElem)
-
-Dev convenience:
-- Hot reload toggle: Press Ctrl+H toggles hot reload behaviour and stores in localStorage (hotreload).
-- When in `config.mode === 'dev'`, the UI will render controls for creating pages/components.
 
 ---
 
-## Development workflow examples
+### `parserWindow(text)`
 
-- Add a simple component from browser (developer UX):
-  1. Use parser() on an element -> parserWindow will show JSON.
-  2. Press 'Y' to open a small form to give the component file name.
-  3. The client triggers POST /addcomponent with `{ path: "components/MyComp.js", component: "<json>" }`.
-  4. Server writes the file to `src/frontend/components/MyComp.js`.
+Dev-only UI:
 
-- Add a page:
-  - POST to /addpage with `{ "page": "/my-page" }`. This:
-    - Creates `src/frontend/views/my-page.ejs` from template.
-    - Appends route to `src/backend/routes/gardener.route.ts`.
-    - After creating, navigate to http://localhost:3000/my-page
+* Preview parsed JSON
+* Press **Y** to create a component file
 
 ---
 
-## Image resizing usage example
+### Utilities
 
-Using the dynamic image endpoint:
-
-- Browser usage in HTML:
-
-```html
-<img src="/img/w.webp/500/500" alt="example" />
-```
-
-- Direct curl:
-
-```bash
-curl -o resized.webp "http://localhost:3000/img/w.webp/300/200"
-```
-
-Files are expected under `src/frontend/assets/:name`. Generated WebP files are stored under `src/backend/.cache/`.
+* `imagePreloader(images)`
+* `fetchElement(selector)`
+* `appendElement(parent, child)`
+* `replaceElement(original, newElem)`
+* `createElement(type, classname)`
 
 ---
 
-## Security & Notes
+## Dev-Only Endpoints ⚠️
 
-- The endpoints /addcomponent and /addpage write files and edit route files dynamically. They are convenience features intended for local development only. Do NOT expose this server to untrusted networks without authentication and sanitization.
-- The image endpoint trusts filenames under `src/frontend/assets`. Sanitize inputs if used beyond trusted local development.
+### `POST /addcomponent`
+
+Creates a frontend component file.
+
+```json
+{
+  "path": "components/MyComp.js",
+  "component": "{ t: 'div', txt: 'Hello' }"
+}
+```
+
+Writes directly to the filesystem.
+
+---
+
+### `POST /addpage`
+
+Creates an EJS page and registers a route.
+
+```json
+{ "page": "/my-page" }
+```
+
+* Generates a new EJS file
+* Appends a route to the backend router
+
+---
+
+## Security Notes
+
+⚠️ **Important**
+
+* `/addcomponent` and `/addpage` mutate files and routes
+* Intended for **local development only**
+* Do NOT expose publicly without authentication and sanitization
 
 ---
 
 ## Troubleshooting
 
-- Server not starting:
-  - Ensure `.env` is present and DB credentials are correct.
-  - Check that Postgres is running and accessible.
-  - Look at server logs printed when running `pnpm run dev` (tsx will show errors).
+* **Server not starting**
 
-- Seed script errors:
-  - Run `pnpm exec tsx src/backend/seed.ts` and check error output. If permission/extension errors occur, create the extension manually:
+  * Check `.env`
+  * Ensure PostgreSQL is running (if enabled)
+  * Inspect logs from `pnpm run dev`
 
-```sql
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-```
+* **Images not loading**
 
-- Tailwind not building:
-  - Dev command runs the tailwind CLI; ensure `pnpm install` succeeded and tailwind binary is available from node_modules.
+  * Ensure source image exists in `src/frontend/assets`
+  * Filename must match `<name>_<width>x<height>.webp`
+
+* **Tailwind not updating**
+
+  * Ensure `pnpm install` completed successfully
 
 ---
 
 ## Contributing
 
-- This is a small personal/dev tool — contributions are welcome:
-  - Open issues for bugs/features.
-  - PRs for features or documentation improvements.
+This is a small personal/dev-focused toolkit.
 
-If you add features that further secure the dynamic endpoints, please document their usage in this README.
+Contributions are welcome:
+
+* bug fixes
+* documentation improvements
+* build pipeline enhancements
+* security hardening
 
 ---
 
 ## License
 
-MIT — see LICENSE file (if present) or consider this repository MIT-licensed by the author.
-
----
+MIT
 

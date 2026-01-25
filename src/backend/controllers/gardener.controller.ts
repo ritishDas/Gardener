@@ -19,13 +19,18 @@ interface AddComponentBody {
 export function addComponent(req: Request<{}, {}, AddComponentBody>, res: Response) {
   try {
     const { path: filePath, component } = req.body;
+    const parsed = JSON.parse(component);
+
+    // pretty format (2 spaces)
+    const formatted = JSON.stringify(parsed, null, 2);
 
     const filecontent = `
-import {gardener} from '../gardener.js'
+import { gardener } from '../gardener.js'
 
-export default function(){
-  return gardener(${component})
-}`;
+export default function () {
+  return gardener(${formatted})
+}
+`;
 
     fs.writeFileSync(`./src/frontend/${filePath}`, filecontent, "utf8");
 
@@ -184,6 +189,11 @@ export async function createStatic(req: Request, res: Response) {
 
     }
     await fsp.rm(outDir, { recursive: true, force: true });
+    await fsp.cp(
+      path.resolve("src/frontend/components"),
+      path.join(finalOut, 'components'),
+      { recursive: true }
+    );
     await fsp.cp(
       path.resolve("src/backend/cache"),
       path.join(finalOut, 'cache'),

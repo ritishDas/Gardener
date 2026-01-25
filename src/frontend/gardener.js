@@ -153,10 +153,6 @@ function togglehotreload() {
 
 export function parserWindow(text) {
   if (config.mode !== 'dev') return;
-  body.addEventListener('keydown', function(event) {
-    if (event.key.toLowerCase() === 'y')
-      copytxt();
-  });
 
 
   const result = gardener({
@@ -190,25 +186,6 @@ export function parserWindow(text) {
         cn: ['p-5', 'overflow-scroll'],
         txt: text
       },
-      {
-        t: 'div',
-        cn: ['bg-white', 'text-black', 'rounded-b-lg', 'p-1'],
-        children: [
-          {
-            t: 'span',
-            txt: 'Press '
-          },
-          {
-            t: 'span',
-            cn: ['text-green-500', 'font-bold'],
-            txt: 'Y'
-          },
-          {
-            t: 'span',
-            txt: ' to add this component'
-          }
-        ]
-      }
     ]
   })
 
