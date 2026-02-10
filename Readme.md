@@ -11,6 +11,9 @@ It is designed for developers who want:
 
 Gardener sits somewhere between a tiny framework and a build system.
 
+Use it with 
+
+`npm create-gardener filename`
 ---
 
 ## What Gardener Includes
