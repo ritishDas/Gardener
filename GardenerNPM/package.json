@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A dom gardener converting dom elements into json and vice versa",
   "main": "index.js",
-  "bin": {
-    "create-gardener": "./starter.js"
+  "bin":{
+    "create-gardener":"./starter.js"
   },
   "type": "module",
   "scripts": {
@@ -22,8 +22,7 @@
     "express": "^5.2.1",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.1.18",
-    "types": "^0.1.1",
-    "zod": "^4.3.6"
+    "types": "^0.1.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
