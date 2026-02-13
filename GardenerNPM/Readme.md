@@ -63,7 +63,10 @@ src/
 │   ├── assets/             # original images
 │   ├── components/
 │   ├── gardener.js
-│   └── styles/
+│   ├── styles/
+│   └── frontendtemplate.ejs    #starter file to create new page
+│
+│
 │
 ├── frontendStatic/          # final static output (generated)
 └── tempfrontend/            # temporary build output (deleted after build)
@@ -103,12 +106,8 @@ pnpm run dev
 ## Image Optimization & Caching
 
 Gardener provides a **deterministic image optimization endpoint**.
+put your images in ./src/frontend/assets and use /cache/[imagename]_[width]x[height].webp in img tag.
 
-### Route
-
-```
-GET /cache/:name
-```
 
 ### Filename format
 
@@ -308,6 +307,7 @@ Creates an EJS page and registers a route.
 
 ⚠️ **Important**
 
+* Gardener doesn't support <span>hi<span>rohan</span></span> use <span><span>hi</span><span>rohan</span></span> basically text node elements shouldn't have siblings.
 * `/addcomponent` and `/addpage` mutate files and routes
 * Intended for **local development only**
 * Do NOT expose publicly without authentication and sanitization
