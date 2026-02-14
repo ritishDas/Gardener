@@ -131,6 +131,7 @@ export async function createStatic(req: Request, res: Response) {
 
     const otherAssets = path.resolve("src/frontend");
     await fsp.mkdir(outDir, { recursive: true });
+    await fsp.mkdir(finalOut, { recursive: true });
 
     const entries2 = await fsp.readdir(otherAssets, { withFileTypes: true });
     const entries = await fsp.readdir(viewsDir, { withFileTypes: true });
