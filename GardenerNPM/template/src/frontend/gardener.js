@@ -1,7 +1,7 @@
 const config = {
   mode: 'dev',
   componentdir: 'components',
-  hotreload: true
+  hotreload: false
 }
 
 let hotReloadtimeout;
