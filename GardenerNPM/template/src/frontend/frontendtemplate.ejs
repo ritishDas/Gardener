@@ -4,23 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/style.css">
-    <title>Gardener</title>
+    <link rel="stylesheet" href="/style2.css">
+    <title>Redvent:Login</title>
   </head>
   <body>
-    <div id='body'>
+    <div class='notification'></div>
+    <div class="bg-gray-200 w-screen h-screen flex justify-center items-center" id='body'>
       <%- include('partials/loader') %>
+
+<!-- Main  Content-->
+
+
       <div class="hero flex justify-around items-center p-5 h-[90vh]">
         <p class='p-5'>
           Gardener is a front-end library for creating and manipulating DOM elements using a declarative JavaScript object syntax. It includes a development server with features like hot-reloading and on-the-fly component creation from existing HTML. The server also provides dynamic image resizing and caching.
         </p>
         <img src="/cache/w_500x500.webp" alt="logo" class="w-500">
       </div>
-
     </div>
     <script src='/global.js' type="module"></script>
-    <script type="module">
+<script type="module">
 
-    </script>
+  import { parser, fetchElement, replaceElement, appendElement } from "/gardener.js";
+</script>
   </body>
 </html>
+
 

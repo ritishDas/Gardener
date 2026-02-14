@@ -17,3 +17,4 @@ router.route('/addpage').post(addPage);
 
 
 router.route('/').get((req, res) => res.render('_'));
+router.route('/login').get((req, res) => res.render('_login'));

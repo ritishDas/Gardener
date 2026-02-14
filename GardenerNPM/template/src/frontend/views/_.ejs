@@ -9,8 +9,11 @@
   <link href="/style.css" rel="stylesheet"/>
 </head>
 
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body>
 
+    <div id='body'>
+
+      <%- include('partials/loader') %>
   <div class="max-w-7xl mx-auto px-6 py-12 space-y-20">
 
     <!-- Hero / Introduction -->
@@ -32,6 +35,8 @@
           class="w-64 lg:w-80 rounded-2xl shadow-2xl"
         />
       </div>
+
+          <a href="/login" class='p-3 rounded-md bg-blue-400 inline-block'>Check A Demo Login Page</a>
     </section>
 
     <!-- Design Philosophy -->
@@ -212,5 +217,8 @@ replaceElement(
     import { parser, fetchElement } from "/gardener.js";
     // parser(fetchElement("#some-selector")); // uncomment when needed
   </script>
+      <div>
+        
 </body>
 </html>
+

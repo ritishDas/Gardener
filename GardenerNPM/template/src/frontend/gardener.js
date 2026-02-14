@@ -333,10 +333,7 @@ export function gardener(Dom) {
 
 export function parser(element, isParent = true) {
   if (typeof element === 'string') {
-    // If user passes raw HTML string
-    const temp = document.createElement('div');
-    temp.innerHTML = element.trim();
-    element = temp.firstElementChild;
+    element = fetchElement(element);
   }
 
   const obj = {
