@@ -7,7 +7,7 @@ export default router;
 
 
 
-router.route("/cache/:name").get(imageOptimiser);
+router.route("/static/cache/:name").get(imageOptimiser);
 router.route("/createstatic").get(createStatic);
 router.route('/addcomponent').post(addComponent);
 router.route('/addpage').post(addPage);
@@ -18,3 +18,4 @@ router.route('/addpage').post(addPage);
 
 router.route('/').get((req, res) => res.render('_'));
 router.route('/login').get((req, res) => res.render('_login'));
+

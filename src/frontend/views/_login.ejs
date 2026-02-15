@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/static/style.css" rel="stylesheet"/>
-  <link href="/static/style2.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/style2.css">
     <title>Redvent:Login</title>
   </head>
   <body>
@@ -42,14 +42,14 @@
 
       </div>
     </div>
-    <script src='/static/global.js' type="module"></script>
+    <script src='/global.js' type="module"></script>
 <script type="module">
 
-  import { parser, fetchElement, replaceElement, appendElement } from "/static/gardener.js";
-  import addNotification from "/static/components/notification.js";
-  import emailsvg from '/static/components/emailsvg.js';
-  import passwordbox from "/static/components/passwordBox.js";
-  import { userlogin } from "/static/components/nonui/api.js";
+  import { parser, fetchElement, replaceElement, appendElement } from "/gardener.js";
+  import addNotification from "/components/notification.js";
+  import emailsvg from '/components/emailsvg.js';
+  import passwordbox from "/components/passwordBox.js";
+  import { userlogin } from "/components/nonui/api.js";
 
   // mount password input
   replaceElement(fetchElement(".passwordbox"), passwordbox(false));

@@ -1,10 +1,7 @@
-//Standalone gardener version for no backend environment
-
-
-
 const config = {
   mode: 'dev',
-  hotreload: true
+  componentdir: 'static/components',
+  hotreload: false
 }
 
 let hotReloadtimeout;
@@ -15,109 +12,146 @@ if (hotReload === null) hotReload = config.hotreload;
 else if (hotReload === 'true') hotReload = true
 else if (hotReload === 'false') hotReload = false
 
+function opnPagedialog(btn = true) {
+  if (btn) {
+    const dialog = gardener({
+      t: 'form', cn: ['addpageform', 'fixed', 'left-2/5', 'bg-gray-200', 'rounded-lg', 'block', 'top-2/5', 'p-2', 'flex', 'flex-col', 'p-5', 'gap-2'], events: {
+        submit: async (e) => {
+          try {
+            e.preventDefault()
+            const data = new FormData(e.target);
+            const input = Object.fromEntries(data.entries());
+            console.log(input)
 
+            const response = await fetch('/addpage', {
+              method: 'POST',
+              headers: {
+                "Content-Type": 'application/json'
+              },
+              body: JSON.stringify(input)
+            }).then(res => res.json())
+            console.log(response)
+            opnPagedialog(false)
+            window.location.href = input.page
+          }
+          catch (err) {
+            console.log(err)
+          }
 
-
-appendElement(body, gardener({
-  t: 'p',
-  cn: ['bg-gray-200', 'fixed', 'bottom-0', 'z-100', 'right-0', 'border-b-1', 'p-2', 'rounded-md'],
-  children: [
-    {
-      t: 'span',
-      txt: 'Press '
-    },
-    {
-      t: 'span',
-      cn: ['text-green-500', 'font-bold'],
-      txt: 'Ctrl+h'
-    },
-    {
-      t: 'span',
-      txt: ' to toggle Hot Reload'
-    },
-    {
-      t: 'form',
-      attr: {
-        id: 'hrcheckbox',
-      },
-      events: {
-        click: () => togglehotreload()
-      },
-      cn: ['p-2', 'bg-red-300'],
-      children: [{
-        t: 'label',
-        txt: 'Hot Reload ',
-      }
-        , {
-        t: 'input',
-        cn: ['hrcheckbox'],
-        attr: {
-          type: 'checkbox'
         }
-      }]
-    }
-  ]
-}))
+      }, children: [{
+        t: 'label',
+        txt: 'ENTER PATH FOR NEW PAGE'
+      }, { t: 'input', attr: { name: 'page' }, cn: ['pathinput'] }]
 
-//appendElement(body, gardener())
+    })
 
-
-function applyHotReloadState() {
-  const hrcheck = fetchElement('#hrcheckbox');
-  const checkbox = fetchElement('.hrcheckbox');
-
-  if (hotReload) {
-    hrcheck.style.background = '#66e666';
-    checkbox.checked = true;
-    hotReloadtimeout = setTimeout(() => window.location.reload(), 1000);
-  } else {
-    hrcheck.style.background = 'red';
-    checkbox.checked = false;
-    clearTimeout(hotReloadtimeout);
+    console.log('test')
+    appendElement(body, dialog);
+    fetchElement('.pathinput').focus();
+  }
+  else {
+    console.log('removed')
+    fetchElement('.addpageform').remove();
   }
 }
 
-applyHotReloadState();
+if (config.mode === 'dev') {
+  const addPagebtn = gardener({
+    t: 'button',
+    cn: ['pb-1.5', 'flex', 'items-center', 'justify-center', 'h-15', 'w-15', 'bg-green-300', 'fixed', 'bottom-22', 'right-2', 'rounded-full', 'text-5xl'],
+    children: [{ t: 'span', txt: '+' }],
+    events: {
+      click: opnPagedialog
+    }
+  });
 
-// togglehotreload();
+  appendElement(body, addPagebtn);
 
 
+  appendElement(body, gardener({
+    t: 'p',
+    cn: ['bg-gray-200', 'fixed', 'bottom-0', 'z-100', 'right-0', 'border-b-1', 'p-2', 'rounded-md'],
+    children: [
+      {
+        t: 'span',
+        txt: 'Press '
+      },
+      {
+        t: 'span',
+        cn: ['text-green-500', 'font-bold'],
+        txt: 'Ctrl+h'
+      },
+      {
+        t: 'span',
+        txt: ' to toggle Hot Reload'
+      },
+      {
+        t: 'form',
+        attr: {
+          id: 'hrcheckbox',
+        },
+        events: {
+          click: () => togglehotreload()
+        },
+        cn: ['p-2', 'bg-red-300'],
+        children: [{
+          t: 'label',
+          txt: 'Hot Reload ',
+        }
+          , {
+          t: 'input',
+          cn: ['hrcheckbox'],
+          attr: {
+            type: 'checkbox'
+          }
+        }]
+      }
+    ]
+  }))
 
-document.addEventListener('keydown', function(e) {
-  // Detect Ctrl + H
-  if (e.ctrlKey && e.key.toLowerCase() === 'h') {
-    e.preventDefault();   // Stop browser from opening history
-    // Your logic here...
-    togglehotreload();
-  }
-});
+  //appendElement(body, gardener())
+
+
+  togglehotreload();
+  document.addEventListener('keydown', function(e) {
+    // Detect Ctrl + H
+    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+      e.preventDefault();   // Stop browser from opening history
+      // Your logic here...
+      togglehotreload();
+    }
+  });
+}
 
 //if (config.mode === 'dev') {
 
 
 function togglehotreload() {
-  hotReload = !hotReload;
-  localStorage.setItem('hotreload', String(hotReload));
-
+  const hr = hotReload;
   const hrcheck = fetchElement('#hrcheckbox');
-  const checkbox = fetchElement('.hrcheckbox');
 
-  if (hotReload) {
+  localStorage.setItem('hotreload', hr);
+
+  hotReload = !hotReload;
+
+  if (hr) {
     hrcheck.style.background = '#66e666';
-    checkbox.checked = true;
+    fetchElement('.hrcheckbox').checked = true;
+    localStorage.setItem('hotreload', 'true');
     hotReloadtimeout = setTimeout(() => window.location.reload(), 1000);
-  } else {
+  }
+  else {
     hrcheck.style.background = 'red';
-    checkbox.checked = false;
+    fetchElement('.hrcheckbox').checked = false;
+    localStorage.setItem('hotreload', 'false');
     clearTimeout(hotReloadtimeout);
   }
+
+  //localStorage.setItem('hotreload', hotReload);
 }
 
-export function parserWindow(input) {
-
-
-  const parsed = JSON.parse(input);
-  const text = JSON.stringify(parsed, null, 1);
+export function parserWindow(text) {
   if (config.mode !== 'dev') return;
 
 
@@ -142,32 +176,75 @@ export function parserWindow(input) {
               id: 'copybtn'
             },
             events: {
-              click: (e) => { copyTextToClipboard(text) }
+              click: copytxt
             }
           }
         ]
       },
       {
-        t: 'pre',
-        cn: ['p-5', 'overflow-scroll', 'text-sm'],
+        t: 'p',
+        cn: ['p-5', 'overflow-scroll'],
         txt: text
-      }
+      },
     ]
   })
 
+  function copytxt() {
+    result.remove()
+
+    const compform = gardener({
+      t: 'form',
+      events: {
+        submit: (event) => {
+          event.preventDefault()
+          copyText(text, `${fetchElement('.componentInp').value}.js`)
+          compform.remove();
+        }
+      },
+      cn: ['fixed', 'left-2/5', 'bg-gray-500', 'rounded-lg', 'block', 'top-2/5', 'p-2'],
+      children: [
+        {
+          t: 'input',
+          cn: ['bg-white', 'componentInp'],
+          attr: {
+            type: 'text',
+            placeholder: 'Component Name'
+          }
+        }
+      ]
+    });
+    appendElement(body, compform);
+
+    fetchElement('.componentInp').focus();
+    //setTimeout(() => result.remove(), 500);
+  }
 
   appendElement(body, result);
 }
 
 
 
-async function copyTextToClipboard(txt) {
+async function copyText(txt, path) {
+  // await navigator.clipboard.writeText(txt);
   try {
-    await navigator.clipboard.writeText(txt);
-    console.log('Component copied to clipboard');
-  } catch (err) {
-    console.error('Clipboard copy failed', err);
+    const res = await fetch('/addcomponent', {
+      method: 'POST',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify({ component: txt, path: `${config.componentdir}/${path}` })
+    })
+
+    if (!res.ok) console.error('wrong');
+
+    const data = await res.json()
+    console.log(data);
+
   }
+  catch (err) {
+    console.error(err);
+  }
+
 }
 
 
@@ -178,6 +255,9 @@ export function fetchElement(param) {
 }
 
 export function appendElement(parent, child) {
+  if (typeof parent === 'string') {
+    parent = fetchElement(parent);
+  }
   parent.appendChild(child);
 }
 
@@ -193,6 +273,9 @@ export function insertText(element, text) {
 }
 
 export function replaceElement(original, New) {
+  if (typeof original === 'string') {
+    original = fetchElement(original);
+  }
   original.replaceWith(New);
 }
 
@@ -257,7 +340,6 @@ export function gardener(Dom) {
 export function parser(element, isParent = true) {
   if (typeof element === 'string') {
     element = fetchElement(element);
-    // If user passes raw HTML string
   }
 
   const obj = {
@@ -300,6 +382,13 @@ export function parser(element, isParent = true) {
 
   return obj
   //Let Browser do the migration from html to json and then use copy paste
+}
+
+export function addEL(parent, event, fun) {
+  if (typeof parent === 'string') {
+    parent = fetchElement(parent);
+  }
+  parent.addEventListener(event, fun)
 }
 
 export function imagePreloader(images) {

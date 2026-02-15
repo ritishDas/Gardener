@@ -1,7 +1,7 @@
 const config = {
   mode: 'dev',
   componentdir: 'components',
-  hotreload: true
+  hotreload: false
 }
 
 let hotReloadtimeout;
@@ -255,6 +255,9 @@ export function fetchElement(param) {
 }
 
 export function appendElement(parent, child) {
+  if (typeof parent === 'string') {
+    parent = fetchElement(parent);
+  }
   parent.appendChild(child);
 }
 
@@ -270,6 +273,9 @@ export function insertText(element, text) {
 }
 
 export function replaceElement(original, New) {
+  if (typeof original === 'string') {
+    original = fetchElement(original);
+  }
   original.replaceWith(New);
 }
 
@@ -333,10 +339,7 @@ export function gardener(Dom) {
 
 export function parser(element, isParent = true) {
   if (typeof element === 'string') {
-    // If user passes raw HTML string
-    const temp = document.createElement('div');
-    temp.innerHTML = element.trim();
-    element = temp.firstElementChild;
+    element = fetchElement(element);
   }
 
   const obj = {
@@ -379,6 +382,13 @@ export function parser(element, isParent = true) {
 
   return obj
   //Let Browser do the migration from html to json and then use copy paste
+}
+
+export function addEL(parent, event, fun) {
+  if (typeof parent === 'string') {
+    parent = fetchElement(parent);
+  }
+  parent.addEventListener(event, fun)
 }
 
 export function imagePreloader(images) {

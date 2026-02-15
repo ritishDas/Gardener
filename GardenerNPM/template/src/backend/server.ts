@@ -13,7 +13,7 @@ app.use(express.static('./src/frontend'));
 app.use(express.json());
 app.use(frontendRoute);
 
-const PORT = 5000;
+const PORT = process.env.PORT || 3000;
 //
 // initDB().then(
 //   () => {

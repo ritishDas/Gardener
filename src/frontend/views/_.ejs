@@ -6,10 +6,16 @@
   <title>Gardener – Declarative DOM Library</title>
   <!-- Assume your custom styles are still here -->
   <link href="/style.css" rel="stylesheet"/>
+  <link href="/style2.css" rel="stylesheet"/>
 </head>
 
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body>
 
+    <div id='body'>
+
+      <!-- Remove this line when you are using hot reload as it will cause delay -->
+      <%- include('partials/loader') %>
+      <!-- Remove this line when you are using hot reload as it will cause delay -->
   <div class="max-w-7xl mx-auto px-6 py-12 space-y-20">
 
     <!-- Hero / Introduction -->
@@ -31,10 +37,12 @@
           class="w-64 lg:w-80 rounded-2xl shadow-2xl"
         />
       </div>
+
+          <a href="/login" class='p-3 rounded-md bg-blue-400 inline-block'>Check A Demo Login Page</a>
     </section>
 
     <!-- Design Philosophy -->
-    <section class="bg-linear-to-br from-slate-900 to-slate-800 rounded-3xl p-10 lg:p-12 shadow-2xl space-y-6">
+    <section class="rounded-3xl p-10 lg:p-12 shadow-2xl space-y-6">
       <h2 class="text-3xl font-bold">Design Philosophy</h2>
       <ul class="list-disc list-inside space-y-3 text-lg">
         <li>No virtual DOM</li>
@@ -196,9 +204,6 @@ replaceElement(
 
         <div class="bg-white p-8 rounded-2xl shadow space-y-4">
           <h3 class="text-2xl font-semibold">Generate Static Site</h3>
-            <span>
-            jj
-            </span>
           <p class="text-slate-700">
             Visit <code>/createstatic</code> to build a fully static version in
             <code>/src/frontendStatic</code>
@@ -212,7 +217,10 @@ replaceElement(
   <script src="/global.js" type="module"></script>
   <script type="module">
     import { parser, fetchElement } from "/gardener.js";
-     parser(fetchElement("body")); // uncomment when needed
+    // parser(fetchElement("#some-selector")); // uncomment when needed
   </script>
+      <div>
+        
 </body>
 </html>
+
