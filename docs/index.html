@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gardener – Declarative DOM Library</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <!-- Assume your custom styles are still here -->
   <link href="/style.css" rel="stylesheet"/>
 </head>
@@ -142,36 +141,53 @@
     </section>
 
     <!-- Creating & Using Components -->
-    <section class="grid lg:grid-cols-2 gap-10">
-      <div class="bg-white p-10 rounded-2xl shadow space-y-6">
-        <h2 class="text-3xl font-bold">Creating Components</h2>
-        <ol class="list-decimal list-inside space-y-4 text-slate-700">
-          <li>Write normal HTML + classes (give parent an <code>id</code> or unique selector)</li>
-          <li>Run: <code>parser(fetchElement('#your-id'))</code></li>
-          <li>Popup appears → choose component name</li>
-          <li>File saved to <code>/src/frontend/components/YourName.js</code></li>
-        </ol>
-      </div>
+<section class="grid lg:grid-cols-2 gap-10">
+  <div class="bg-white p-10 rounded-2xl shadow space-y-6 border-t-4 border-blue-500">
+    <h2 class="text-3xl font-bold">1. Creating Components</h2>
+    <p class="text-slate-600">
+      Turn static HTML into dynamic functions. Use <code>?parameter?</code> syntax to define variables within your markup.
+    </p>
+    
+    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+      <p class="text-sm font-semibold text-slate-500 mb-2">INPUT EXAMPLE:</p>
+      <code class="text-blue-600">&lt;div&gt;Hello, ?name?&lt;/div&gt;</code>
+    </div>
 
-      <div class="bg-white p-10 rounded-2xl shadow space-y-6">
-        <h2 class="text-3xl font-bold">Using Components</h2>
-        <pre class="bg-slate-900 text-slate-100 p-6 rounded-xl font-mono text-sm overflow-x-auto">
-<code>import { myHeader } from '/components/myHeader.js'
+    <ol class="list-decimal list-inside space-y-4 text-slate-700">
+      <li>Write HTML + classes (assign the parent a unique <code>id</code>)</li>
+      <li>Use <code>?variable?</code> for data you want to pass later</li>
+      <li>Run <code>parser('#your-id')</code> in the console</li>
+      <li>Choose a name; the file saves to <code>/components/YourName.js</code></li>
+    </ol>
+  </div>
 
-replaceElement(
-  fetchElement('#header-placeholder'),
-  myHeader()
-)</code>
-        </pre>
-      </div>
-    </section>
+  <div class="bg-white p-10 rounded-2xl shadow space-y-6 border-t-4 border-green-500">
+    <h2 class="text-3xl font-bold">2. Using Components</h2>
+    <p class="text-slate-600">
+      Import the generated file and pass an object containing your defined parameters.
+    </p>
 
+    <pre class="bg-slate-900 text-slate-100 p-6 rounded-xl font-mono text-sm overflow-x-auto">
+<code>// Import the parsed component
+import { myUserCard } from '/components/myUserCard.js'
+
+// Pass data as an object: { name: 'Value' }
+const html = myUserCard({ name: 'Jane Doe' })
+
+replaceElement('#target', html)</code>
+    </pre>
+    
+    <div class="p-4 bg-amber-50 rounded-lg text-sm text-amber-800 italic">
+      <strong>Note:</strong> The parser automatically maps <code>?name?</code> to the <code>name</code> key in the component's argument object.
+    </div>
+  </div>
+</section>
     <!-- Image Optimization -->
     <section class="bg-white p-10 rounded-2xl shadow space-y-6">
       <h2 class="text-3xl font-bold">Image Optimization & Caching</h2>
       <ul class="list-disc list-inside space-y-3 text-slate-700">
         <li>Place originals in <code>/src/frontend/assets/</code></li>
-        <li>Use: <code>&lt;img src="/cache/photo_800x600.webp"&gt;</code></li>
+        <li>Use: <code>&lt;img src="/static/cache/photo_800x600.webp"&gt;</code></li>
       </ul>
       <p class="text-slate-600 mt-4">
         Server auto-converts to WebP, resizes, and caches on demand.

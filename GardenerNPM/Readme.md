@@ -16,8 +16,10 @@ Use it with
 `npm create-gardener filename`
 ---
 
-[See Docs](https://ritish.site/Gardener)
-[Github](https://github.com/ritishDas/Gardener)
+* [See Docs](https://ritish.site/Gardener)
+
+
+* [Github](https://github.com/ritishDas/Gardener)
 
 
 
