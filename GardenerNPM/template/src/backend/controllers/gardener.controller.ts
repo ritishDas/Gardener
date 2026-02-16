@@ -19,20 +19,8 @@ interface AddComponentBody {
 export function addComponent(req: Request<{}, {}, AddComponentBody>, res: Response) {
   try {
     const { path: filePath, component } = req.body;
-    const parsed = JSON.parse(component);
 
-    // pretty format (2 spaces)
-    const formatted = JSON.stringify(parsed, null, 2);
-
-    const filecontent = `
-import { gardener, fetchElement, replaceElement } from '../gardener.js'
-
-export default function thisfun() {
-  return gardener(${formatted})
-}
-`;
-
-    fs.writeFileSync(`./src/frontend/${filePath}`, filecontent, "utf8");
+    fs.writeFileSync(`./src/frontend/${filePath}`, component, "utf8");
 
     res.json({ success: true });
   } catch (err) {

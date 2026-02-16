@@ -1,7 +1,5 @@
 //Standalone gardener version for no backend environment
 
-
-
 const config = {
   mode: 'dev',
   hotreload: false
@@ -9,57 +7,6 @@ const config = {
 
 let hotReloadtimeout;
 const body = fetchElement('body');
-let hotReload = localStorage.getItem('hotreload');
-
-if (hotReload === null) hotReload = config.hotreload;
-else if (hotReload === 'true') hotReload = true
-else if (hotReload === 'false') hotReload = false
-
-
-
-
-appendElement(body, gardener({
-  t: 'p',
-  cn: ['bg-gray-200', 'fixed', 'bottom-0', 'z-100', 'right-0', 'border-b-1', 'p-2', 'rounded-md'],
-  children: [
-    {
-      t: 'span',
-      txt: 'Press '
-    },
-    {
-      t: 'span',
-      cn: ['text-green-500', 'font-bold'],
-      txt: 'Ctrl+h'
-    },
-    {
-      t: 'span',
-      txt: ' to toggle Hot Reload'
-    },
-    {
-      t: 'form',
-      attr: {
-        id: 'hrcheckbox',
-      },
-      events: {
-        click: () => togglehotreload()
-      },
-      cn: ['p-2', 'bg-red-300'],
-      children: [{
-        t: 'label',
-        txt: 'Hot Reload ',
-      }
-        , {
-        t: 'input',
-        cn: ['hrcheckbox'],
-        attr: {
-          type: 'checkbox'
-        }
-      }]
-    }
-  ]
-}))
-
-//appendElement(body, gardener())
 
 
 function applyHotReloadState() {
@@ -77,20 +24,79 @@ function applyHotReloadState() {
   }
 }
 
-applyHotReloadState();
+let hotReload = localStorage.getItem('hotreload');
+if (hotReload === null) hotReload = config.hotreload;
+else if (hotReload === 'true') hotReload = true
+else if (hotReload === 'false') hotReload = false
+
+
+
+
+if (config.mode === 'dev') {
+  appendElement(body, gardener({
+    t: 'p',
+    attr: {
+      style: `
+position:fixed;
+bottom:0;
+right:0;
+z-index:100;
+background:#e5e7eb;
+padding:8px;
+border-radius:6px;
+font-family:sans-serif;
+color:black;
+font-size:14px;
+`
+    },
+    children: [
+      { t: 'span', txt: 'Press ' },
+      {
+        t: 'span',
+        attr: { style: 'color:#22c55e;font-weight:bold;' },
+        txt: 'Ctrl+h'
+      },
+      { t: 'span', txt: ' to toggle Hot Reload' },
+      {
+        t: 'form',
+        attr: {
+          id: 'hrcheckbox',
+          style: 'margin-top:6px;padding:6px;background:red;border-radius:4px;cursor:pointer;'
+        },
+        events: { click: togglehotreload },
+        children: [
+          { t: 'label', txt: 'Hot Reload ' },
+          {
+            t: 'input',
+            cn: ['hrcheckbox'],
+            attr: { type: 'checkbox' }
+          }
+        ]
+      }
+    ]
+  }));
+
+  applyHotReloadState();
+
+  document.addEventListener('keydown', function(e) {
+    // Detect Ctrl + H
+    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+      e.preventDefault();   // Stop browser from opening history
+      // Your logic here...
+      togglehotreload();
+    }
+  });
+}
+
+//appendElement(body, gardener())
+
+
+
 
 // togglehotreload();
 
 
 
-document.addEventListener('keydown', function(e) {
-  // Detect Ctrl + H
-  if (e.ctrlKey && e.key.toLowerCase() === 'h') {
-    e.preventDefault();   // Stop browser from opening history
-    // Your logic here...
-    togglehotreload();
-  }
-});
 
 //if (config.mode === 'dev') {
 
@@ -113,48 +119,83 @@ function togglehotreload() {
   }
 }
 
-export function parserWindow(input) {
-
-
-  const parsed = JSON.parse(input);
-  const text = JSON.stringify(parsed, null, 1);
+function parserWindow(input) {
   if (config.mode !== 'dev') return;
 
+  let text;
+  try {
+    text = JSON.stringify(JSON.parse(input), null, 2);
+  } catch {
+    text = input;
+  }
 
   const result = gardener({
     t: 'div',
-    cn: ['fixed', 'border-2', 'border-black', 'bg-gray-500', 'text-white', 'rounded-lg', 'z-90', 'w-2/4', 'h-2/4', 'left-1/4', 'flex', 'flex-col', 'justify-between', 'top-1/4'],
+    attr: {
+      style: `
+position:fixed;
+top:25%;
+left:25%;
+width:50%;
+height:50%;
+background:#6b7280;
+color:white;
+border:2px solid black;
+border-radius:8px;
+z-index:90;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+`
+    },
     children: [
       {
         t: 'div',
-        cn: ['bg-gray-200', 'h-15', 'text-black', 'rounded-t-lg', 'flex', 'items-center', 'justify-around'],
+        attr: {
+          style: `
+background:#e5e7eb;
+color:black;
+padding:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-top-left-radius:8px;
+border-top-right-radius:8px;
+`
+        },
         children: [
-          {
-            t: 'h3',
-            cn: ['font-bold'],
-            txt: 'Parser Window'
-          },
+          { t: 'h3', txt: 'Parser Window' },
           {
             t: 'button',
-            cn: ['p-2', 'bg-red-300', 'rounded-lg', 'cursor-pointer'],
-            txt: 'Add Component',
+            txt: 'Copy JSON',
             attr: {
-              id: 'copybtn'
+              style: `
+padding:6px 10px;
+background:#f87171;
+border-radius:6px;
+cursor:pointer;
+`
             },
             events: {
-              click: (e) => { copyTextToClipboard(text) }
+              click: () => copyTextToClipboard(text)
             }
           }
         ]
       },
       {
         t: 'pre',
-        cn: ['p-5', 'overflow-scroll', 'text-sm'],
-        txt: text
+        txt: text,
+        attr: {
+          style: `
+padding:12px;
+overflow:auto;
+font-size:12px;
+white-space:pre-wrap;
+`
+        }
       }
     ]
-  })
-
+  });
 
   appendElement(body, result);
 }
@@ -164,7 +205,7 @@ export function parserWindow(input) {
 async function copyTextToClipboard(txt) {
   try {
     await navigator.clipboard.writeText(txt);
-    console.log('Component copied to clipboard');
+    alert('Component copied to clipboard');
   } catch (err) {
     console.error('Clipboard copy failed', err);
   }
@@ -178,9 +219,7 @@ export function fetchElement(param) {
 }
 
 export function appendElement(parent, child) {
-  if (typeof parent === 'string') {
-    parent = fetchElement(parent);
-  }
+  if (typeof parent === 'string') parent = fetchElement(parent);
   parent.appendChild(child);
 }
 
@@ -196,9 +235,7 @@ export function insertText(element, text) {
 }
 
 export function replaceElement(original, New) {
-  if (typeof original === 'string') {
-    original = fetchElement(original);
-  }
+  if (typeof original === 'string') original = fetchElement(original);
   original.replaceWith(New);
 }
 
@@ -260,12 +297,51 @@ export function gardener(Dom) {
   return element;
 }
 
+function cleanStringAndList(input) {
+  const pattern = /\?"?(\w+)"?\?/g;
+  const vars = new Set();
+  let match;
+
+  while ((match = pattern.exec(input)) !== null) {
+    vars.add(match[1]);
+  }
+
+  // Replace ?var? with "+var+" and clean up resulting empty strings or double quotes
+  const cleanedString = input
+    .replace(pattern, '"+$1+"')
+    .replace(/^""\+/, '')
+    .replace(/\+""$/, '');
+
+  return {
+    cleanedString,
+    extractedList: [...vars].join(', ')
+  };
+}
+
+function generateFile(obj) {
+
+
+  const formatted = JSON.stringify(obj, null, 2);
+  const { cleanedString, extractedList } = cleanStringAndList(formatted);
+
+  return `
+import { gardener, fetchElement, replaceElement } from '../gardener.js'
+
+export default function thisfun({${extractedList}}) {
+  return gardener(${cleanedString})
+}
+`;
+}
+
+
+
+
 export function parser(element, isParent = true) {
   if (typeof element === 'string') {
     element = fetchElement(element);
-    // If user passes raw HTML string
   }
 
+  console.log(element)
   const obj = {
     t: element.tagName.toLowerCase(),
   };
@@ -286,27 +362,42 @@ export function parser(element, isParent = true) {
     obj.txt = element.textContent.trim();
 
     if (isParent) {
-      parserWindow(JSON.stringify(obj))
+
+      parserWindow(generateFile(obj))
     }
 
     return obj;
   }
 
+
   // add children recursively
   const children = [];
-  for (const child of element.children) {
+  for (const child of element.childNodes) {
+    if (child.nodeType === Node.COMMENT_NODE) continue;
+
+    if (child.nodeType === Node.TEXT_NODE && child.textContent.trim() === '') continue;
+
+    if (child.nodeType === Node.TEXT_NODE) {
+      children.push({ t: 'span', txt: child.textContent.trim() });
+      continue;
+    }
     children.push(parser(child, false));
   }
   if (children.length) obj.children = children;
 
 
   if (isParent) {
-    parserWindow(JSON.stringify(obj))
+
+
+    parserWindow(generateFile(obj))
   }
 
   return obj
+
+
   //Let Browser do the migration from html to json and then use copy paste
 }
+
 
 export function addEL(parent, event, fun) {
   if (typeof parent === 'string') {
@@ -314,8 +405,6 @@ export function addEL(parent, event, fun) {
   }
   parent.addEventListener(event, fun)
 }
-
-
 
 export function imagePreloader(images) {
   const body = fetchElement('body')
@@ -336,5 +425,6 @@ export function imagePreloader(images) {
 
   })
 }
+
 
 

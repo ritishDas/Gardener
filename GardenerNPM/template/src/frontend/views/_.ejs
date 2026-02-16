@@ -214,10 +214,19 @@ replaceElement(
 
   </div>
 
+      <!-- <div class='test'> -->
+      <!--  hi there you must be ?name? how old are you let me guess ?age?  -->
+      <!-- </div> -->
+
   <script src="/static/global.js" type="module"></script>
   <script type="module">
-    import { parser, fetchElement } from "/static/gardener.js";
-    // parser(fetchElement("body")); // uncomment when needed
+    import { gardener,parser, fetchElement,replaceElement } from "/static/gardener.js";
+    // import parameterised from '/static/components/para.js';
+
+     // parser('.test')
+    // replaceElement('.test', parameterised({name:'ritish',age:'39'}))
+
+
   </script>
       <div>
         

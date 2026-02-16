@@ -337,11 +337,56 @@ export function gardener(Dom) {
   return element;
 }
 
+
+function cleanStringAndList(input) {
+  const pattern = /\?"?(\w+)"?\?/g;
+  const vars = new Set();
+  let match;
+
+  while ((match = pattern.exec(input)) !== null) {
+    vars.add(match[1]);
+  }
+
+  // Replace ?var? with "+var+" and clean up resulting empty strings or double quotes
+  const cleanedString = input
+    .replace(pattern, '"+$1+"')
+    .replace(/^""\+/, '')
+    .replace(/\+""$/, '');
+
+  return {
+    cleanedString,
+    extractedList: [...vars].join(', ')
+  };
+}
+
+function generateFile(obj) {
+
+
+  const formatted = JSON.stringify(obj, null, 2);
+  const { cleanedString, extractedList } = cleanStringAndList(formatted);
+
+  return `
+import { gardener, fetchElement, replaceElement } from '../gardener.js'
+
+export default function thisfun({${extractedList}}) {
+  return gardener(${cleanedString})
+}
+`;
+}
+
+
+// Example:
+// const result = cleanStringAndList('hi "{ritish}" how are you');
+// console.log(result.cleanedString); // "hi ritish how are you"
+// console.log(result.extractedList);  // ["ritish"]
+
+
 export function parser(element, isParent = true) {
   if (typeof element === 'string') {
     element = fetchElement(element);
   }
 
+  console.log(element)
   const obj = {
     t: element.tagName.toLowerCase(),
   };
@@ -362,25 +407,39 @@ export function parser(element, isParent = true) {
     obj.txt = element.textContent.trim();
 
     if (isParent) {
-      parserWindow(JSON.stringify(obj))
+
+      parserWindow(generateFile(obj))
     }
 
     return obj;
   }
 
+
   // add children recursively
   const children = [];
-  for (const child of element.children) {
+  for (const child of element.childNodes) {
+    if (child.nodeType === Node.COMMENT_NODE) continue;
+
+    if (child.nodeType === Node.TEXT_NODE && child.textContent.trim() === '') continue;
+
+    if (child.nodeType === Node.TEXT_NODE) {
+      children.push({ t: 'span', txt: child.textContent.trim() });
+      continue;
+    }
     children.push(parser(child, false));
   }
   if (children.length) obj.children = children;
 
 
   if (isParent) {
-    parserWindow(JSON.stringify(obj))
+
+
+    parserWindow(generateFile(obj))
   }
 
   return obj
+
+
   //Let Browser do the migration from html to json and then use copy paste
 }
 

@@ -3,7 +3,7 @@
   "compilerOptions": {
     // File Layout
      "rootDir": "./src/backend/",
-     "outDir": "./build",
+     "outDir": "./src/build",
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
