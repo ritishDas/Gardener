@@ -54,7 +54,7 @@ font-size:14px;
       {
         t: 'span',
         attr: { style: 'color:#22c55e;font-weight:bold;' },
-        txt: 'Ctrl+h'
+        txt: 'Alt+h'
       },
       { t: 'span', txt: ' to toggle Hot Reload' },
       {
@@ -79,8 +79,7 @@ font-size:14px;
   applyHotReloadState();
 
   document.addEventListener('keydown', function(e) {
-    // Detect Ctrl + H
-    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+    if (e.altKey && e.key.toLowerCase() === 'h') {
       e.preventDefault();   // Stop browser from opening history
       // Your logic here...
       togglehotreload();
@@ -425,6 +424,7 @@ export function imagePreloader(images) {
 
   })
 }
+
 
 
 

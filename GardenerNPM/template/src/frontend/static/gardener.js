@@ -80,7 +80,7 @@ if (config.mode === 'dev') {
       {
         t: 'span',
         cn: ['text-green-500', 'font-bold'],
-        txt: 'Ctrl+h'
+        txt: 'Alt+h'
       },
       {
         t: 'span',
@@ -116,7 +116,7 @@ if (config.mode === 'dev') {
   togglehotreload();
   document.addEventListener('keydown', function(e) {
     // Detect Ctrl + H
-    if (e.ctrlKey && e.key.toLowerCase() === 'h') {
+    if (e.altKey && e.key.toLowerCase() === 'h') {
       e.preventDefault();   // Stop browser from opening history
       // Your logic here...
       togglehotreload();
@@ -477,5 +477,6 @@ export function imagePreloader(images) {
 
   })
 }
+
 
 
