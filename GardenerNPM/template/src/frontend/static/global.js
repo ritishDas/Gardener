@@ -52,6 +52,7 @@ function pageloader() {
   setTimeout(() => loader.remove(), 400)
 
 }
+
 //console.log('hellooo');
 //parser(fetchElement('.hero'));
 //parser(fetchElement('nav'));

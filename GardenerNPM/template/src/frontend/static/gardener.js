@@ -383,9 +383,6 @@ export default function thisfun({${extractedList}}) {
 }
 
 
-// Example:
-// const result = cleanStringAndList('hi "{ritish}" how are you');
-// console.log(result.cleanedString); // "hi ritish how are you"
 // console.log(result.extractedList);  // ["ritish"]
 
 
@@ -458,25 +455,19 @@ export function addEL(parent, event, fun) {
   parent.addEventListener(event, fun)
 }
 
-export function imagePreloader(images) {
-  const body = fetchElement('body')
-  images.forEach(entry => {
-    appendElement(body, gardener({
-      t: 'img',
-      cn: ['preloaderimage'],
-      attr: {
-        src: entry,
-        alt: entry
-      }
-    }));
-
-    setTimeout(() => {
-      const images = document.querySelectorAll('.preloaderimage');
-      images.forEach(entry => { entry.style.display = 'none' });
-    }, 0)
-
-  })
+export class State {
+  constructor(value) {
+    this.value = value;
+    this.cb = [];
+  }
+  registerCb(cb) {
+    cb(this.value);
+    this.cb.push(cb);
+  }
+  setTo(val) {
+    this.value = val;
+    this.cb.forEach(cb => { cb(val) });
+  }
 }
-
 
 

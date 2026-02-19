@@ -1,4 +1,5 @@
-import { Router } from "express"
+import type { Request, Response } from 'express';
+import { Router } from "express";
 import { addComponent, addPage, createStatic, imageOptimiser } from "../controllers/gardener.controller.js";
 
 const router: Router = Router();
@@ -16,6 +17,6 @@ router.route('/addpage').post(addPage);
 
 
 
-router.route('/').get((req, res) => res.render('_'));
-router.route('/login').get((req, res) => res.render('_login'));
+router.route('/').get((req: Request, res: Response) => res.render('_'));
+router.route('/login').get((req: Request, res: Response) => res.render('_login'));
 

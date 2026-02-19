@@ -394,7 +394,6 @@ export function parser(element, isParent = true) {
   return obj
 
 
-  //Let Browser do the migration from html to json and then use copy paste
 }
 
 
@@ -405,26 +404,20 @@ export function addEL(parent, event, fun) {
   parent.addEventListener(event, fun)
 }
 
-export function imagePreloader(images) {
-  const body = fetchElement('body')
-  images.forEach(entry => {
-    appendElement(body, gardener({
-      t: 'img',
-      cn: ['preloaderimage'],
-      attr: {
-        src: entry,
-        alt: entry
-      }
-    }));
 
-    setTimeout(() => {
-      const images = document.querySelectorAll('.preloaderimage');
-      images.forEach(entry => { entry.style.display = 'none' });
-    }, 0)
-
-  })
+export class State {
+  constructor(value) {
+    this.value = value;
+    this.cb = [];
+  }
+  registerCb(cb) {
+    cb(this.value);
+    this.cb.push(cb);
+  }
+  setTo(val) {
+    this.value = val;
+    this.cb.forEach(cb => { cb(val) });
+  }
 }
-
-
 
 
