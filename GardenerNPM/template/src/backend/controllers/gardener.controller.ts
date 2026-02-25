@@ -16,9 +16,11 @@ interface AddComponentBody {
   component: string;
 }
 
-export function addComponent(req: Request<{}, {}, AddComponentBody>, res: Response) {
+export async function addComponent(req: Request<{}, {}, AddComponentBody>, res: Response) {
   try {
     const { path: filePath, component } = req.body;
+
+    await fsp.mkdir('./src/frontend/static/components', { recursive: true });
 
     fs.writeFileSync(`./src/frontend/${filePath}`, component, "utf8");
 
@@ -101,6 +103,9 @@ export async function addPage(req: Request, res: Response) {
 
     fs.appendFileSync('./src/backend/routes/gardener.route.ts', ` router.route("${pagename}").get((req: Request, res: Response) => res.render("${name}"))\n `);
 
+    await fsp.mkdir('src/frontend/static/pages', { recursive: true });
+
+    fs.writeFileSync(`./src/frontend/static/pages/${name}.js`, 'import { log, parser, fetchElement, replaceElement, appendElement, State, addEL } from "/static/gardener.js";', "utf8");
     res.json({ success: true });
   }
   catch (err) {
@@ -184,4 +189,5 @@ export async function createStatic(req: Request, res: Response) {
     return res.status(500).json({ error: "Static build failed" });
   }
 }
+
 

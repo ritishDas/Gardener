@@ -323,6 +323,14 @@ function generateFile(obj) {
   const formatted = JSON.stringify(obj, null, 2);
   const { cleanedString, extractedList } = cleanStringAndList(formatted);
 
+  if (extractedList.length === 0) return `
+import { gardener, fetchElement, replaceElement } from '../gardener.js'
+
+export default function thisfun() {
+  return gardener(${cleanedString})
+}
+`;
+
   return `
 import { gardener, fetchElement, replaceElement } from '../gardener.js'
 

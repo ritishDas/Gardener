@@ -471,3 +471,7 @@ export class State {
 }
 
 
+export function log(target) {
+  console.log(target)
+}
+
