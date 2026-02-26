@@ -29,3 +29,4 @@ router.route("/onemore").get((req: Request, res: Response) => res.render("_onemo
 
 router.route("/re").get((req: Request, res: Response) => res.render("_re"));
 router.route("/playground").get((req: Request, res: Response) => res.render("_playground"));
+router.route("/get-started").get((req: Request, res: Response) => res.render("_get-started"));

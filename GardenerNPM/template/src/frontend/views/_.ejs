@@ -1,232 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gardener – Declarative DOM Library</title>
-  <!-- Assume your custom styles are still here -->
-  <link href="/static/style.css" rel="stylesheet"/>
-  <link href="/static/style2.css" rel="stylesheet"/>
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/static/cache/favicon_50x50.webp" />
+    <link href="/static/style.css" rel="stylesheet"/>
+    <link href="/static/style2.css" rel="stylesheet"/>
+    <title>Gardener: The Mini Web Framework</title>
+  </head>
+  <body class="bg-slate-50 text-slate-900 font-sans">
 
-<body>
+    <div class='loader w-screen h-screen bg-white fixed z-2'> </div>
+    <div class='notification'></div>
 
-    <div id='body'>
-
-      <!-- Remove this line when you are using hot reload as it will cause delay -->
-      <%- include('partials/loader') %>
-      <!-- Remove this line when you are using hot reload as it will cause delay -->
-  <div class="max-w-7xl mx-auto px-6 py-12 space-y-20">
-
-    <!-- Hero / Introduction -->
-    <section class="bg-gradient-to-br from-emerald-50 to-cyan-50 rounded-3xl p-10 lg:p-16 shadow-xl">
-      <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-        <div class="max-w-2xl space-y-6">
-          <h1 class="text-4xl lg:text-5xl font-bold text-slate-800">Gardener</h1>
-          <p class="text-xl text-slate-700 leading-relaxed">
-            Gardener is a lightweight front-end library for creating and manipulating DOM elements using a clean, declarative JavaScript object syntax.
-          </p>
-          <p class="text-lg text-slate-600 leading-relaxed">
-            It comes with a development server featuring hot reload, on-the-fly component creation from existing HTML, dynamic image resizing & caching, and zero virtual DOM / JSX / build-step philosophy.
-          </p>
+    <div id='main'>
+      <div class='hero flex-wrap w-full h-screen bg-green-200 flex justify-center items-center px-10'>
+        <div class='w-200'>
+          <h1 class='text-6xl font-bold text-green-900'>Gardener</h1>
+          <h2 class='text-2xl font-bold text-green-800 mb-4'>Develop With No Bloat</h2>
+          <p class="text-lg mb-6 max-w-md">Gardener is a lightweight, DOM-first front-end library. No virtual DOM, no JSX, and no compilation step. Just the real DOM.</p>
+          <a class="bg-green-700 text-white px-8 py-3 rounded-lg font-bold hover:bg-green-800 transition" href='/get-started'>Get Started</a>
         </div>
-
-        <img
-          src="/static/cache/gardener_500x500.webp"
-          alt="Gardener logo"
-          class="w-64 lg:w-80 rounded-2xl shadow-2xl"
-        />
+        <img src="/static/cache/gardener_500x500.webp" alt="Gardener Logo" class="w-96 h-96 object-contain ml-10">
       </div>
 
-          <a href="/login" class='p-3 rounded-md bg-blue-400 inline-block'>Check A Demo Login Page</a>
-    </section>
-
-    <!-- Design Philosophy -->
-    <section class="rounded-3xl p-10 lg:p-12 shadow-2xl space-y-6">
-      <h2 class="text-3xl font-bold">Design Philosophy</h2>
-      <ul class="list-disc list-inside space-y-3 text-lg">
-        <li>No virtual DOM</li>
-        <li>No JSX</li>
-        <li>No compilation / build step</li>
-        <li>DOM-first and fully deterministic</li>
-        <li>Everything is explicit and inspectable in the browser</li>
-      </ul>
-    </section>
-
-    <!-- Core API -->
-    <section class="space-y-10">
-      <h2 class="text-3xl font-bold text-center lg:text-left">Core Utilities</h2>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="bg-white p-8 rounded-2xl shadow space-y-4">
-          <h3 class="text-2xl font-semibold">DOM Helpers</h3>
-          <ul class="list-disc list-inside space-y-2 text-slate-700">
-            <li><code class="font-mono">fetchElement(selector)</code> — safe <code>querySelector</code> wrapper</li>
-            <li><code>appendElement(parent, child)</code> — append child node</li>
-            <li><code>replaceElement(oldElement, newElement)</code> — replace DOM node</li>
-            <li><code>createElement(type, classes)</code> — low-level element factory</li>
-            <li><code>imagePreloader(images)</code> — preload images efficiently</li>
+      <div class="max-w-5xl mx-auto py-20 px-6 grid md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-3xl font-bold mb-4 text-green-900">✨ Philosophy</h3>
+          <ul class="space-y-3 text-slate-700">
+            <li><strong>DOM-First:</strong> Renders directly to the real DOM.</li>
+            <li><strong>Deterministic:</strong> If you can inspect it, you can understand it.</li>
+            <li><strong>Native:</strong> Works in the browser via ES modules.</li>
+            <li><strong>Zero Build:</strong> No bundlers or magic required.</li>
           </ul>
         </div>
+        <div>
+          <h3 class="text-3xl font-bold mb-4 text-green-900">🚀 Features</h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-4 bg-white shadow-sm border border-green-100 rounded">Declarative UI</div>
+            <div class="p-4 bg-white shadow-sm border border-green-100 rounded">SVG Namespace Support</div>
+            <div class="p-4 bg-white shadow-sm border border-green-100 rounded">Hot Reload</div>
+            <div class="p-4 bg-white shadow-sm border border-green-100 rounded">Image Optimization</div>
+          </div>
+        </div>
+      </div>
 
-        <div class="bg-white p-8 rounded-2xl shadow space-y-4">
-          <h3 class="text-2xl font-semibold">Gardener – The Declarative Builder</h3>
-          <pre class="bg-slate-900 text-slate-100 text-sm p-5 rounded-xl overflow-x-auto font-mono">
-<code>gardener({
-  t: 'div',
-  cn: ['p-6', 'flex', 'gap-4'],
-  attr: { id: 'hero', role: 'banner' },
-  txt: 'Welcome',
+      <div class="bg-slate-900 py-20 text-white">
+        <div class="max-w-5xl mx-auto px-6">
+          <h3 class="text-3xl font-bold mb-8 text-center text-green-400">The Core API</h3>
+          <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 font-mono text-sm overflow-x-auto">
+<pre class="text-blue-300">
+gardener({
+  t: <span class="text-green-300">'div'</span>,
+  cn: [<span class="text-green-300">'p-6'</span>, <span class="text-green-300">'flex'</span>],
+  attr: { id: <span class="text-green-300">'hero'</span> },
+  txt: <span class="text-green-300">'Welcome to the Garden'</span>,
   events: {
-    click: () => console.log('clicked!')
+    click: () => console.log(<span class="text-green-300">'Growth!'</span>)
   },
-  children: [ /* nested objects */ ]
-})</code>
-          </pre>
+  children: [
+    { t: <span class="text-green-300">'span'</span>, txt: <span class="text-green-300">'Pure DOM nodes.'</span> }
+  ]
+})
+</pre>
+          </div>
         </div>
       </div>
 
-      <div class="bg-white p-8 rounded-2xl shadow overflow-x-auto">
-        <table class="w-full text-left border border-slate-200">
-          <thead class="bg-slate-100">
-            <tr>
-              <th class="p-4 font-semibold">Key</th>
-              <th class="p-4 font-semibold">Description</th>
-            </tr>
-          </thead>
-          <tbody class="text-slate-700">
-            <tr><td class="p-4 border-t"><code>t</code></td>     <td class="p-4 border-t">HTML/SVG tag name</td></tr>
-            <tr><td class="p-4 border-t"><code>cn</code></td>    <td class="p-4 border-t">Array of class names</td></tr>
-            <tr><td class="p-4 border-t"><code>attr</code></td>  <td class="p-4 border-t">Attributes / properties object</td></tr>
-            <tr><td class="p-4 border-t"><code>txt</code></td>   <td class="p-4 border-t">Text content (string)</td></tr>
-            <tr><td class="p-4 border-t"><code>events</code></td><td class="p-4 border-t">Event listeners <code>{ event: handler }</code></td></tr>
-            <tr><td class="p-4 border-t"><code>children</code></td><td class="p-4 border-t">Array of nested gardener objects</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Runtime Configuration -->
-    <section class="bg-white p-10 rounded-2xl shadow space-y-6">
-      <h2 class="text-3xl font-bold">Runtime Configuration</h2>
-      <pre class="bg-slate-900 text-slate-100 p-6 rounded-xl overflow-x-auto font-mono text-sm">
-<code>const config = {
-  mode: 'dev',           // 'dev' | 'prod'
-  componentdir: 'components',
-  hotreload: true
-}</code>
-      </pre>
-      <ul class="list-disc list-inside space-y-3 text-slate-700">
-        <li><strong>mode</strong>: <code>dev</code> → enables parser, hot reload, dev UI; <code>prod</code> → disables everything</li>
-        <li><strong>componentdir</strong>: folder for auto-generated component files</li>
-        <li><strong>hotreload</strong>: persisted in localStorage</li>
-      </ul>
-    </section>
-
-    <!-- Hot Reload -->
-    <section class="bg-white p-10 rounded-2xl shadow space-y-6">
-      <h2 class="text-3xl font-bold">Hot Reload (Dev Mode)</h2>
-      <ul class="list-disc list-inside space-y-3 text-slate-700">
-        <li>State saved in <code>localStorage</code></li>
-        <li>Auto-reload after ~1 second when enabled</li>
-        <li>Disabling cancels pending timers</li>
-      </ul>
-      <div class="inline-block bg-slate-100 px-5 py-3 rounded-xl mt-4">
-        <p class="font-semibold">Toggle shortcut: <kbd class="bg-white px-2 py-1 rounded border border-slate-300">Ctrl + H</kbd></p>
-      </div>
-    </section>
-
-    <!-- SVG Support -->
-    <section class="bg-white p-10 rounded-2xl shadow space-y-6">
-      <h2 class="text-3xl font-bold">SVG Support</h2>
-      <p class="text-slate-700">
-        Gardener automatically uses the SVG namespace for these tags:
-      </p>
-      <pre class="bg-slate-900 text-emerald-300 font-mono p-5 rounded-xl inline-block">
-<code>svg, path, circle, rect, line, polygon, polyline, g, defs, clipPath, use</code>
-      </pre>
-      <p class="text-slate-700">All attributes are applied via <code>setAttribute</code> safely.</p>
-    </section>
-
-    <!-- Creating & Using Components -->
-    <section class="grid lg:grid-cols-2 gap-10">
-      <div class="bg-white p-10 rounded-2xl shadow space-y-6">
-        <h2 class="text-3xl font-bold">Creating Components</h2>
-        <ol class="list-decimal list-inside space-y-4 text-slate-700">
-          <li>Write normal HTML + classes (give parent an <code>id</code> or unique selector)</li>
-          <li>Run: <code>parser(fetchElement('#your-id'))</code></li>
-          <li>Popup appears → choose component name</li>
-          <li>File saved to <code>/src/frontend/components/YourName.js</code></li>
-        </ol>
-      </div>
-
-      <div class="bg-white p-10 rounded-2xl shadow space-y-6">
-        <h2 class="text-3xl font-bold">Using Components</h2>
-        <pre class="bg-slate-900 text-slate-100 p-6 rounded-xl font-mono text-sm overflow-x-auto">
-<code>import { myHeader } from '/components/myHeader.js'
-
-replaceElement(
-  fetchElement('#header-placeholder'),
-  myHeader()
-)</code>
-        </pre>
-      </div>
-    </section>
-
-    <!-- Image Optimization -->
-    <section class="bg-white p-10 rounded-2xl shadow space-y-6">
-      <h2 class="text-3xl font-bold">Image Optimization & Caching</h2>
-      <ul class="list-disc list-inside space-y-3 text-slate-700">
-        <li>Place originals in <code>/src/frontend/assets/</code></li>
-        <li>Use: <code>&lt;img src="/static/cache/photo_800x600.webp"&gt;</code></li>
-      </ul>
-      <p class="text-slate-600 mt-4">
-        Server auto-converts to WebP, resizes, and caches on demand.
-      </p>
-    </section>
-
-    <!-- Development Tools -->
-    <section class="space-y-10">
-      <h2 class="text-3xl font-bold text-center">Development Tools</h2>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="bg-white p-8 rounded-2xl shadow space-y-4">
-          <h3 class="text-2xl font-semibold">Create New Page</h3>
-          <ol class="list-decimal list-inside space-y-2 text-slate-700">
-            <li>Click floating <strong>+</strong> button (dev mode only)</li>
-            <li>Enter route (<code>/about</code>, etc.)</li>
-            <li>New page created & browser navigates</li>
-          </ol>
-          <p class="text-sm text-slate-500 mt-4">
-            Template: <code>/src/backend/frontendtemplate.ejs</code>
-          </p>
-        </div>
-
-        <div class="bg-white p-8 rounded-2xl shadow space-y-4">
-          <h3 class="text-2xl font-semibold">Generate Static Site</h3>
-          <p class="text-slate-700">
-            Visit <code>/createstatic</code> to build a fully static version in
-            <code>/src/frontendStatic</code>
-          </p>
+      <div class="max-w-5xl mx-auto py-20 px-6 text-center">
+        <h3 class="text-3xl font-bold mb-4 text-green-900">🧠 Simple State</h3>
+        <p class="mb-8 text-slate-600">No proxies. No diffing. Just clean, reactive callbacks.</p>
+        <div class="inline-block text-left bg-white p-6 rounded shadow-lg border-t-4 border-green-500 font-mono text-sm">
+          <p class="text-slate-500">// Initialize</p>
+          <p>const count = new State(0);</p>
+          <p class="text-slate-500 mt-2">// React</p>
+          <p>count.registerCb(val => updateUI(val));</p>
         </div>
       </div>
-    </section>
 
-  </div>
+      <footer class="bg-green-900 text-green-100 py-12 text-center">
+        <p class="text-xl italic">"Because sometimes you don't need a forest. Just a garden."</p>
+        <div class="mt-6 text-sm opacity-70">
+          MIT Licensed | Built on Express & EJS
+        </div>
+      </footer>
+    </div>
 
-
-  <script type="module">
-    import { gardener, fetchElement,replaceElement } from "/static/gardener.js";
-    import {parser, log } from '/static/gardenerDev.js';
-
-    // parser('body');
-    log('hi')
-
-
-
-  </script>
-      <div>
-        
-</body>
+  </body>
+  <script type='module' src='/static/global.js'> </script>
+  <script type='module' src='/static/pages/_.js'> </script>
 </html>
-

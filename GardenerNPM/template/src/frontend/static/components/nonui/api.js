@@ -1,22 +1,39 @@
-async function postFetch(path, body) {
-  try {
-    const data = await fetch(path, {
-      credentials: 'include',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
+const baseName = '';
 
-    return await data.json();
+export async function Fetch(
+  path,
+  body,
+  method = 'POST'
+) {
+
+  try {
+
+    const headers = {
+      "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": 'true'
+      // "Authorization": 'Bearer ' + auth
+    }
+    let res;
+    if (method === 'GET' || method === 'DELETE')
+      res = await fetch(baseName + path, {
+        credentials: "include",
+        headers: headers,
+        method,
+      });
+
+    else
+      res = await fetch(baseName + path, {
+        credentials: "include",
+        headers: headers,
+        method,
+        body: JSON.stringify(body),
+      });
+
+
+
+    return res
   }
   catch (err) {
-    console.error('error while requesting', err);
+    console.log(err)
   }
-}
-
-export async function userlogin(email, password) {
-  const result = await postFetch('/login', { email, password });
-  console.log(result);
 }

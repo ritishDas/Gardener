@@ -368,7 +368,7 @@ export function parser(element, isParent = true) {
   //Let Browser do the migration from html to json and then use copy paste
 }
 
-export function addEL(parent, event, fun) {
+export function addEl(parent, event, fun) {
   if (typeof parent === 'string') {
     parent = fetchElement(parent);
   }
