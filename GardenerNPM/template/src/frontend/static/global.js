@@ -1,4 +1,4 @@
-import { parser, fetchElement, replaceElement, gardener, appendElement } from './gardener.js'
+import { fetchElement, replaceElement, gardener, appendElement } from './gardener.js'
 
 const body = fetchElement('#body')
 
@@ -21,7 +21,7 @@ function nextPagehandler() {
       e.preventDefault();
       appendElement(body, gardener({
         t: 'div',
-        cn: ['tempnpdiv', 'top-0', 'left-[100vw]', 'absolute', 'h-screen', 'w-screen', 'shadow-[30px_0_60px_15px_rgb(0,0,0)]'],
+        cn: ['tempnpdiv', 'top-0', 'left-[100vw]', 'fixed', 'h-screen', 'w-screen'],
       }))
       const width = window.innerWidth
       console.log(width)
@@ -37,7 +37,10 @@ function nextPagehandler() {
     setTimeout(() => {
       body.style.transform = 'translateX(0px)';
       setTimeout(() => {
-        fetchElement('.tempnpdiv').remove()
+        try {
+          fetchElement('.tempnpdiv').remove()
+        }
+        catch (err) { }
 
       }, 200)
     }, 200);
@@ -53,6 +56,3 @@ function pageloader() {
 
 }
 
-//console.log('hellooo');
-//parser(fetchElement('.hero'));
-//parser(fetchElement('nav'));

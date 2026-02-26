@@ -3,10 +3,12 @@ import path from 'path';
 
 async function buildHelper() {
   const src = path.resolve('src', 'frontend');
-  const dest = path.resolve('build', 'src', 'frontend');
+  const dest = path.resolve('build', 'frontend');
 
   await fs.cp(src, dest, { recursive: true });
-  await fs.cp('./package.json', '');
+
+  await fs.writeFile(path.join(dest, 'static', 'gardenerConfig.js'), "export const mode = 'pro';", 'utf8');
+
 }
 
 buildHelper();// const path = require('path');

@@ -24,11 +24,11 @@ export async function addPage(req: Request, res: Response) {
 
     await replaceLastOccurrence(viewPath, '<script', `<script src="/static/pages/${name}.js" type='module'></script>`);
 
-    const routeEntry = `\nrouter.route("${pagename}").get((req: Request, res: Response) => res.render("${name}"));\n`;
+    const routeEntry = `router.route("${pagename}").get((req: Request, res: Response) => res.render("${name}"));\n`;
     await fsp.appendFile(routePath, routeEntry, "utf8");
 
     await fsp.mkdir(jsDir, { recursive: true });
-    const jsContent = 'import { gardener, log, parser, fetchElement, replaceElement, appendElement, State, addEL } from "/static/gardener.js";';
+    const jsContent = 'import { gardener, fetchElement, replaceElement, appendElement } from "/static/gardener.js";\n import {log, parser, addEl, State} from "/static/gardenerDev.js"';
     await fsp.writeFile(jsFilePath, jsContent, "utf8");
 
     res.json({ success: true });
