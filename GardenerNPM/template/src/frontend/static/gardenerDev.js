@@ -135,15 +135,27 @@ export function parserWindow(text) {
             txt: 'Parser Window'
           },
           {
-            t: 'button',
-            cn: ['p-2', 'bg-red-300', 'rounded-lg', 'cursor-pointer'],
-            txt: 'Add Component',
-            attr: {
-              id: 'copybtn'
-            },
-            events: {
-              click: addComponentForm
-            }
+            t: 'div',
+            cn: ['flex', 'gap-3'],
+            children: [
+              {
+                t: 'button',
+                cn: ['p-2', 'bg-green-300', 'rounded-lg', 'cursor-pointer'],
+                txt: 'Copy Component',
+                attr: { id: 'copybtn' },
+                events: {
+                  click: () => { navigator.clipboard.writeText(text); fetchElement('#copybtn').innerText = 'copied'; }
+                }
+              },
+              {
+                t: 'button',
+                cn: ['p-2', 'bg-red-300', 'rounded-lg', 'cursor-pointer'],
+                txt: 'Add Component',
+                events: {
+                  click: addComponentForm
+                }
+              }
+            ]
           }
         ]
       },
@@ -163,7 +175,7 @@ export function parserWindow(text) {
       events: {
         submit: (event) => {
           event.preventDefault()
-          addComponent(text, `${fetchElement('.componentInp').value}.js`)
+          addComponent(text, `${fetchElement('.componentInp').value}`)
           compform.remove();
         }
       },
@@ -198,7 +210,7 @@ async function addComponent(txt, path) {
       headers: {
         "Content-Type": 'application/json'
       },
-      body: JSON.stringify({ component: txt, path: `${config.componentdir}/${path}` })
+      body: JSON.stringify({ component: generateFile(txt, path), path: `${config.componentdir}/${path}.js` })
     })
 
     if (!res.ok) console.error('wrong');
@@ -279,16 +291,15 @@ function cleanStringAndList(input) {
   };
 }
 
-function generateFile(obj) {
+function generateFile(obj, name) {
 
 
-  const formatted = JSON.stringify(obj, null, 2);
-  const { cleanedString, extractedList } = cleanStringAndList(formatted);
+  const { cleanedString, extractedList } = cleanStringAndList(obj);
 
   if (extractedList.length === 0) return `
 import { gardener, fetchElement, replaceElement } from '../gardener.js'
 
-export default function thisfun() {
+export function ${name}() {
   return gardener(${cleanedString})
 }
 `;
@@ -296,7 +307,7 @@ export default function thisfun() {
   return `
 import { gardener, fetchElement, replaceElement } from '../gardener.js'
 
-export default function thisfun({${extractedList}}) {
+export function ${name}({${extractedList}}) {
   return gardener(${cleanedString})
 }
 `;
@@ -333,7 +344,7 @@ export function parser(element, isParent = true) {
 
     if (isParent) {
 
-      parserWindow(generateFile(obj))
+      parserWindow(JSON.stringify(obj, null, 2))
     }
 
     return obj;
@@ -359,7 +370,7 @@ export function parser(element, isParent = true) {
   if (isParent) {
 
 
-    parserWindow(generateFile(obj))
+    parserWindow(JSON.stringify(obj, null, 2))
   }
 
   return obj

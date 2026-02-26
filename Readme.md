@@ -351,15 +351,6 @@ gardener.js
 
 ---
 
-# 🧭 Roadmap Ideas
-
-* Fine-grained reactive bindings
-* Dev inspector panel
-* Server-side rendering mode
-* Plugin API
-* Optional diff mode
-
----
 
 # 📜 License
 

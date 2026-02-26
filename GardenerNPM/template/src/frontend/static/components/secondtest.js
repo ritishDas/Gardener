@@ -1,0 +1,6 @@
+
+import { gardener, fetchElement, replaceElement } from '../gardener.js'
+
+export function secondtest.js() {
+  return gardener("{\n  \"t\": \"button\",\n  \"cn\": [\n    \"copybtn\"\n  ],\n  \"children\": [\n    {\n      \"t\": \"svg\",\n      \"cn\": [\n        \"icon\",\n        \"icon-tabler\",\n        \"icons-tabler-outline\",\n        \"icon-tabler-clipboard\"\n      ],\n      \"attr\": {\n        \"xmlns\": \"http://www.w3.org/2000/svg\",\n        \"width\": \"24\",\n        \"height\": \"24\",\n        \"viewBox\": \"0 0 24 24\",\n        \"fill\": \"none\",\n        \"stroke\": \"currentColor\",\n        \"stroke-width\": \"2\",\n        \"stroke-linecap\": \"round\",\n        \"stroke-linejoin\": \"round\"\n      },\n      \"children\": [\n        {\n          \"t\": \"path\",\n          \"attr\": {\n            \"stroke\": \"none\",\n            \"d\": \"M0 0h24v24H0z\",\n            \"fill\": \"none\"\n          }\n        },\n        {\n          \"t\": \"path\",\n          \"attr\": {\n            \"d\": \"M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2\"\n          }\n        },\n        {\n          \"t\": \"path\",\n          \"attr\": {\n            \"d\": \"M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2\"\n          }\n        }\n      ]\n    }\n  ]\n}")
+}

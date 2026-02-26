@@ -24,3 +24,4 @@ export default async function generateWebP(
 
   console.log("✅ Image successfully generated");
 }
+

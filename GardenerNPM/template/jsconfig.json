@@ -1,13 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
+    "target": "esnext",
+    "module": "nodenext",
+    "noUncheckedSideEffectImports": true,
     "moduleResolution": "Bundler",
     "checkJs": true,
     "baseUrl": ".",
     "paths": {
       "/static/*.js": ["src/frontend/static/*.js"]
-    }
+    },
+
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+
+    "strict":true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
   },
   "include": ["src/frontend/static/**/*.js"]
 }
