@@ -25,3 +25,5 @@ router.route('/login').get((req: Request, res: Response) => res.render('_login')
 router.route("/rd").get((req: Request, res: Response) => res.render("_rd"));
 
 router.route("/car").get((req: Request, res: Response) => res.render("_car"));
+
+router.route("/onemore").get((req: Request, res: Response) => res.render("_onemore"));

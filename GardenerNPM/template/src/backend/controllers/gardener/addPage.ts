@@ -2,30 +2,31 @@ import type { Request, Response } from "express";
 import fsp from "fs/promises";
 import path from 'path';
 
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const frontendDir = path.resolve(__dirname, '..', '..', '..', 'frontend');
+
 export async function addPage(req: Request, res: Response) {
   try {
     const pagename: string = req.body.page;
     const name = pagename.replaceAll('/', '_');
 
-    // Define Relative Paths
-    const templatePath = path.join(process.cwd(), 'src/frontend/frontendtemplate.ejs');
-    const viewPath = path.join(process.cwd(), `src/frontend/views/${name}.ejs`);
-    const routePath = path.join(process.cwd(), 'src/backend/routes/gardener.route.ts');
-    const jsDir = path.join(process.cwd(), 'src/frontend/static/pages');
+    const templatePath = path.join(frontendDir, 'frontendtemplate.ejs');
+    const viewPath = path.join(frontendDir, `views`, `${name}.ejs`);
+    const routePath = path.resolve(__dirname, '..', '..', 'routes', 'gardener.route.ts');
+    const jsDir = path.join(frontendDir, 'static/pages');
     const jsFilePath = path.join(jsDir, `${name}.js`);
 
-    // 1. Copy template to new view
     const templateContent = await fsp.readFile(templatePath, 'utf8');
     await fsp.writeFile(viewPath, templateContent, "utf8");
 
-    // 2. Inject script tag into the new EJS file
-    await replaceLastOccurrence(viewPath, '<script', `<script src="/static/pages/${name}.js"></script>`);
+    await replaceLastOccurrence(viewPath, '<script', `<script src="/static/pages/${name}.js" type='module'></script>`);
 
-    // 3. Append route to backend (ensure the 'router' variable exists in that file)
     const routeEntry = `\nrouter.route("${pagename}").get((req: Request, res: Response) => res.render("${name}"));\n`;
     await fsp.appendFile(routePath, routeEntry, "utf8");
 
-    // 4. Create static JS file
     await fsp.mkdir(jsDir, { recursive: true });
     const jsContent = 'import { gardener, log, parser, fetchElement, replaceElement, appendElement, State, addEL } from "/static/gardener.js";';
     await fsp.writeFile(jsFilePath, jsContent, "utf8");
@@ -44,9 +45,7 @@ async function replaceLastOccurrence(filePath: string, searchPattern: string, re
 
   for (let i = lines.length - 1; i >= 0; i--) {
 
-    if (lines[i].includes(searchPattern)) {
-      // Logic: Prepend the new script tag before the existing script tag or replace the line
-      // Based on your original code, we are replacing the line containing the pattern
+    if (lines[i]!.includes(searchPattern)) {
       lines[i] = `${replacementLine}\n${lines[i]}`;
       found = true;
       break;

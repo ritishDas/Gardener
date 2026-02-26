@@ -3,9 +3,15 @@ import path from "path";
 import fsp from "fs/promises";
 import ejs from "ejs";
 
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const frontendDir = path.resolve(__dirname, '..', '..', '..', 'frontend');
+
 export async function createStatic(req: Request, res: Response) {
   try {
-    const viewsDir = path.resolve("src/frontend/views");
+    const viewsDir = path.join(frontendDir, "views");
     const outDir = path.resolve("src/tempfrontend");
     const finalOut = path.resolve("src/frontendStatic");
 
@@ -61,7 +67,7 @@ export async function createStatic(req: Request, res: Response) {
     }
     await fsp.rm(outDir, { recursive: true, force: true });
     await fsp.cp(
-      path.resolve("src/frontend/static"),
+      path.join(frontendDir, "static"),
       path.join(finalOut, 'static'),
       { recursive: true }
     );

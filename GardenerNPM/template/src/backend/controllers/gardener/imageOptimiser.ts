@@ -27,12 +27,11 @@ export async function imageOptimiser(req: Request, res: Response) {
     const width = parseInt(widthStr, 10);
     const height = parseInt(heightStr, 10);
 
-    const cacheDir = path.join(__dirname, "../../frontend/static/cache");
+    const cacheDir = path.join(__dirname, "..", "..", "..", "frontend", "static", "cache");
     await fsp.mkdir(cacheDir, { recursive: true });
 
     const outputPath = path.join(cacheDir, name);
 
-    // 1️⃣ Return cached file if exists
     try {
       await fsp.access(outputPath);
       return res.sendFile(path.basename(outputPath), {
@@ -42,8 +41,7 @@ export async function imageOptimiser(req: Request, res: Response) {
       // not cached → continue
     }
 
-    // 2️⃣ Find source image with same base name
-    const assetsDir = path.resolve("./src/frontend/assets");
+    const assetsDir = path.resolve(__dirname, '..', '..', '..', "frontend", "assets");
     const files = await fsp.readdir(assetsDir);
 
     const sourceFile = files.find((file) => {
@@ -57,10 +55,8 @@ export async function imageOptimiser(req: Request, res: Response) {
 
     const inputPath = path.join(assetsDir, sourceFile);
 
-    // 3️⃣ Generate optimized WebP
     await generateWebP(inputPath, outputPath, width, height);
 
-    // 4️⃣ Return generated file
     return res.sendFile(path.basename(outputPath), {
       root: path.dirname(outputPath),
     });
