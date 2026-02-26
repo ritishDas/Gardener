@@ -6,7 +6,7 @@
     "checkJs": true,
     "baseUrl": ".",
     "paths": {
-      "/static/*": ["src/frontend/static/*"]
+      "/static/*.js": ["src/frontend/static/*.js"]
     }
   },
   "include": ["src/frontend/static/**/*.js"]

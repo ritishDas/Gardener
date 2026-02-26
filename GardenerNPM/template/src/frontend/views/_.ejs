@@ -14,16 +14,23 @@
     <div class='notification'></div>
 
     <div id='main'>
+
+      <!-- navbar -->
+      <%-include('partials/components/navbar')  %>
+
+      <!-- hero -->
       <div class='hero flex-wrap w-full h-screen bg-green-200 flex justify-center items-center px-10'>
         <div class='w-200'>
           <h1 class='text-6xl font-bold text-green-900'>Gardener</h1>
           <h2 class='text-2xl font-bold text-green-800 mb-4'>Develop With No Bloat</h2>
           <p class="text-lg mb-6 max-w-md">Gardener is a lightweight, DOM-first front-end library. No virtual DOM, no JSX, and no compilation step. Just the real DOM.</p>
           <a class="bg-green-700 text-white px-8 py-3 rounded-lg font-bold hover:bg-green-800 transition" href='/get-started'>Get Started</a>
+          <a class="border border-green-700 text-black px-8 py-3 rounded-lg font-bold hover:text-white hover:bg-green-800 transition" href='https://github.com/ritishDas/Gardener'>View On Github</a>
         </div>
         <img src="/static/cache/gardener_500x500.webp" alt="Gardener Logo" class="w-96 h-96 object-contain ml-10">
       </div>
 
+      <!-- Philosophy -->
       <div class="max-w-5xl mx-auto py-20 px-6 grid md:grid-cols-2 gap-12">
         <div>
           <h3 class="text-3xl font-bold mb-4 text-green-900">✨ Philosophy</h3>
@@ -34,6 +41,8 @@
             <li><strong>Zero Build:</strong> No bundlers or magic required.</li>
           </ul>
         </div>
+
+        <!-- Features -->
         <div>
           <h3 class="text-3xl font-bold mb-4 text-green-900">🚀 Features</h3>
           <div class="grid grid-cols-2 gap-4">
@@ -45,6 +54,7 @@
         </div>
       </div>
 
+      <!-- Api Example -->
       <div class="bg-slate-900 py-20 text-white">
         <div class="max-w-5xl mx-auto px-6">
           <h3 class="text-3xl font-bold mb-8 text-center text-green-400">The Core API</h3>
@@ -78,6 +88,7 @@ gardener({
         </div>
       </div>
 
+      <!-- Footer -->
       <footer class="bg-green-900 text-green-100 py-12 text-center">
         <p class="text-xl italic">"Because sometimes you don't need a forest. Just a garden."</p>
         <div class="mt-6 text-sm opacity-70">

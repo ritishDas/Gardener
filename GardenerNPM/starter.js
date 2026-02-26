@@ -50,8 +50,11 @@ console.log(`
 
 Next steps:
   cd ${projectName}
-  pnpm install
-  pnpm dev
+
+  pnpm install / npm install
+  pnpm dev / npm run dev
+
+
 `);
 
 

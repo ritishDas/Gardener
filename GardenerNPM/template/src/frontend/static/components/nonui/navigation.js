@@ -1,4 +1,5 @@
 import { gardener, fetchElement, appendElement } from "/static/gardener.js";
+import { mode } from "/static/gardenerConfig.js";
 
 const body = fetchElement('#main');
 
@@ -51,6 +52,8 @@ export function pageloader() {
   const loader = fetchElement('.loader');
   loader.style.transition = '.4s';
   loader.style.opacity = '0';
-  setTimeout(() => loader.remove(), 400)
-
+  if (mode !== 'dev')
+    setTimeout(() => loader.remove(), 400)
+  else
+    loader.remove();
 }
