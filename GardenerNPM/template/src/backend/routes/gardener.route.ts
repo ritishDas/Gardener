@@ -28,3 +28,4 @@ router.route("/car").get((req: Request, res: Response) => res.render("_car"));
 router.route("/onemore").get((req: Request, res: Response) => res.render("_onemore"));
 
 router.route("/re").get((req: Request, res: Response) => res.render("_re"));
+router.route("/playground").get((req: Request, res: Response) => res.render("_playground"));

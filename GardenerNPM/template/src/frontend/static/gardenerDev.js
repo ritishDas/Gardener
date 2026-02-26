@@ -11,13 +11,13 @@ const config = {
 
 
 
-let hotReload = localStorage.getItem('hotreload');
+let hotReload;
+const localStore = localStorage.getItem('hotreload');
 
-if (hotReload === null) hotReload = config.hotreload;
-else if (hotReload === 'true') hotReload = true
-else if (hotReload === 'false') hotReload = false
+if (localStore === null) hotReload = config.hotreload;
+else if (localStore === 'true') hotReload = true
+else if (localStore === 'false') hotReload = false
 
-if (mode === 'pro') hotReload = false;
 
 
 const addPagebtn = gardener({
@@ -233,7 +233,7 @@ function opnPagedialog(btn = true) {
             }).then(res => res.json())
             console.log(response)
             opnPagedialog(false)
-            window.location.href = input.page
+            window.location.href = `${input.page}`
           }
           catch (err) {
             console.log(err)

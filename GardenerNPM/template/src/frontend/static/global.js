@@ -13,9 +13,9 @@ function nextPagehandler() {
     link.addEventListener('click', (e) => {
 
       //event delegation
-      const link = e.target.closest('a');
-      if (!link) return;
-      if (link.target === '_blank') return;
+      // const link = e.target.closest('a');
+      // if (!link) return;
+      // if (link.target === '_blank') return;
       //event delegation
 
       e.preventDefault();
