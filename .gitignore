@@ -1,6 +1,5 @@
 # Dependencies
-/node_modules
-.env
+node_modules/
 # Cache
 .cache
 src/backend/cache
