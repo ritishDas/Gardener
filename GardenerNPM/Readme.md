@@ -1,5 +1,3 @@
----
-
 # 🌱 Gardener
 
 **Gardener** is a lightweight, DOM-first front-end library for building and manipulating HTML/SVG elements using a clean, declarative JavaScript object syntax.

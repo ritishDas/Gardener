@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "Bundler",
+    "checkJs": true,
+    "baseUrl": ".",
+    "paths": {
+      "/static/*.js": ["src/frontend/static/*.js"]
+    },
+
+
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true
+  },
+  "include": ["src/frontend/static/**/*.js"]
+}
