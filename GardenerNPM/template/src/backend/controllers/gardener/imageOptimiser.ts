@@ -13,7 +13,7 @@ export async function imageOptimiser(req: Request, res: Response) {
   try {
     const { name } = req.params;
 
-    if (typeof name !== 'string') return;
+    if (typeof name !== 'string') return res.status(400).json({ success: false, message: "invalid path" });
     // name format: test_500x300.webp
     const match = name.match(/^(.+?)_(\d+)x(\d+)\.webp$/);
 

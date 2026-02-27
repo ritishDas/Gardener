@@ -32,6 +32,7 @@ const addPagebtn = gardener({
 if (mode === 'dev') {
   appendElement(body, addPagebtn);
 
+  togglehotreload();
 
   appendElement(body, gardener({
     t: 'p',
@@ -78,7 +79,6 @@ if (mode === 'dev') {
 //appendElement(body, gardener())
 
 
-togglehotreload();
 
 document.addEventListener('keydown', function(e) {
   // Detect Ctrl + H

@@ -2,7 +2,6 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "nodenext",
-    "noUncheckedSideEffectImports": true,
     "moduleResolution": "Bundler",
     "checkJs": true,
     "baseUrl": ".",
@@ -16,7 +15,6 @@
     "declarationMap": true,
 
 
-    "strict":true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,

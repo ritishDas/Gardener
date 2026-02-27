@@ -7,7 +7,7 @@ async function buildHelper() {
 
   await fs.cp(src, dest, { recursive: true });
 
-  await fs.writeFile(path.join(dest, 'static', 'gardenerConfig.js'), "export const mode = 'pro';", 'utf8');
+  await fs.writeFile(path.join(dest, 'static', 'gardenerConfig.js'), "export const mode = 'prod';", 'utf8');
 
 }
 

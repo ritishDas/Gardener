@@ -4,9 +4,16 @@ import { gardener, fetchElement, replaceElement, appendElement } from "/static/g
 import { log, parser, addEl, State } from "/static/gardenerDev.js"
 
 addEl('.copybtn', 'click', () => {
-  navigator.clipboard.writeText(fetchElement('.initCommand').innerText)
-  replaceElement('.copybtn', copybtn());
-  addNotification({ status: 'success', message: 'Copied' })
+  try {
+    navigator.clipboard.writeText(fetchElement('.initCommand').innerText)
+    replaceElement('.copybtn', copybtn());
+    addNotification({ status: 'success', message: 'Copied' })
+  }
+  catch (err) {
+    addNotification({
+      status: 'failure', message: "Couldn't Copy"
+    });
+  }
 })
 
 
