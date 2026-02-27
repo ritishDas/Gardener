@@ -32,7 +32,6 @@ const addPagebtn = gardener({
 if (mode === 'dev') {
   appendElement(body, addPagebtn);
 
-  togglehotreload();
 
   appendElement(body, gardener({
     t: 'p',
@@ -74,6 +73,8 @@ if (mode === 'dev') {
       }
     ]
   }))
+
+  togglehotreload();
 }
 
 //appendElement(body, gardener())
