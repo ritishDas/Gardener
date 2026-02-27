@@ -11,6 +11,12 @@ Everything is explicit and inspectable directly in the browser.
 
 ---
 
+## Version: 2.0.0
+
+* lsp support on frontend
+* separate files for js logic inside /static/pages/(filename)
+* bug fixes in application and scripts
+
 ## ✨ Philosophy
 
 Gardener follows a **DOM-first, deterministic approach**:
