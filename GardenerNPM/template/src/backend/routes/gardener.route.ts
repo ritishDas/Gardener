@@ -26,7 +26,6 @@ router.route("/test").get((req: Request, res: Response) => res.render("_test"))
 router.route("/rd").get((req: Request, res: Response) => res.render("_rd"));
 router.route("/car").get((req: Request, res: Response) => res.render("_car"));
 router.route("/onemore").get((req: Request, res: Response) => res.render("_onemore"));
-
-router.route("/re").get((req: Request, res: Response) => res.render("_re"));
 router.route("/playground").get((req: Request, res: Response) => res.render("_playground"));
+router.route("/documentation").get((req: Request, res: Response) => res.render("_documentation"));
 router.route("/get-started").get((req: Request, res: Response) => res.render("_get-started"));
