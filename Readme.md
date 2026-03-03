@@ -9,7 +9,7 @@ No compilation step.
 No magic.
 
 Everything is explicit and inspectable directly in the browser.
-
+[See it on npm](https://www.npmjs.com/package/create-gardener)
 ---
 
 ## ✨ Philosophy
