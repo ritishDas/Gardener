@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from "express";
-import { addComponent, addPage, createStatic, imageOptimiser } from "../controllers/gardener/index.js";
+import { addComponent, addPage, createStatic, imageOptimiser, saveTemplate } from "../controllers/gardener/index.js";
 
 const router: Router = Router();
 export default router;
@@ -14,6 +14,7 @@ if (process.env.NODE_ENV !== 'production') {
   router.route("/createstatic").get(createStatic);
   router.route('/addcomponent').post(addComponent);
   router.route('/addpage').post(addPage);
+  router.route('/savetemplate').post(saveTemplate);
 }
 
 
@@ -21,11 +22,3 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 router.route('/').get((req: Request, res: Response) => res.render('_'));
-router.route('/login').get((req: Request, res: Response) => res.render('_login'));
-router.route("/test").get((req: Request, res: Response) => res.render("_test"))
-router.route("/rd").get((req: Request, res: Response) => res.render("_rd"));
-router.route("/car").get((req: Request, res: Response) => res.render("_car"));
-router.route("/onemore").get((req: Request, res: Response) => res.render("_onemore"));
-router.route("/playground").get((req: Request, res: Response) => res.render("_playground"));
-router.route("/documentation").get((req: Request, res: Response) => res.render("_documentation"));
-router.route("/get-started").get((req: Request, res: Response) => res.render("_get-started"));
