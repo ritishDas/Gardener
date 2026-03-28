@@ -7,8 +7,12 @@ async function buildHelper() {
 
   await fs.cp(src, dest, { recursive: true });
 
-  await fs.writeFile(path.join(dest, 'static', 'gardenerConfig.js'), "export const mode = 'prod';", 'utf8');
+  await fs.writeFile(path.join(dest, 'static', 'gardenerConfig.js'), "export const
+ mode = 'prod'; ", 'utf8');
+
+  await fs.rm(path.join(dest, 'template'), { recursive: true });
 
 }
 
-buildHelper();// const path = require('path');
+buildHelper();
+

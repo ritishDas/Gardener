@@ -1,7 +1,7 @@
 {
-  "name": "create-gardener",
-  "version": "2.0.3",
-  "description": "A dom gardener converting dom elements into json and vice versa",
+  "name": "app",
+  "version": "1.0.0",
+  "description": "a web app build with create gardener",
   "type": "module",
   "scripts": {
     "start": "cross-env NODE_ENV=production node build/backend/server.js",
