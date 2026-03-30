@@ -310,7 +310,6 @@ async function addComponent(txt, path) {
     if (!res.ok) console.error('wrong');
 
     const data = await res.json()
-    console.log(data);
 
   }
   catch (err) {
@@ -328,7 +327,6 @@ function opnPagedialog(btn = true) {
             e.preventDefault()
             const data = new FormData(e.target);
             const input = Object.fromEntries(data.entries());
-            console.log(input)
 
             const response = await fetch('/addpage', {
               method: 'POST',
@@ -337,7 +335,6 @@ function opnPagedialog(btn = true) {
               },
               body: JSON.stringify(input)
             }).then(res => res.json())
-            console.log(response)
             opnPagedialog(false)
             window.location.href = `${input.page}`
           }
@@ -353,12 +350,10 @@ function opnPagedialog(btn = true) {
 
     })
 
-    console.log('test')
     appendElement(body, dialog);
     fetchElement('.pathinput').focus();
   }
   else {
-    console.log('removed')
     fetchElement('.addpageform').remove();
   }
 }
@@ -416,7 +411,6 @@ export function parser(element, isParent = true) {
     element = fetchElement(element);
   }
 
-  console.log(element)
   const obj = {
     t: element.tagName.toLowerCase(),
   };
@@ -488,6 +482,9 @@ export class State {
   registerCb(cb) {
     cb(this.value);
     this.cb.push(cb);
+  }
+  unregisterCb(cb) {
+    this.cb = this.cb.filter(c => c !== cb);
   }
   setTo(val) {
     this.value = val;
