@@ -41,12 +41,12 @@ async function findTemplate(fileName: string) {
 
 export async function addPage(req: Request, res: Response) {
   try {
-    const pagename: string = req.body.page;
-    const name = pagename.replaceAll('/', '_');
+    const name: string = req.body.page;
+    // const name = pagename.replaceAll('/', '_');
 
 
 
-    const templatePath = await findTemplate(name);//path.join(frontendDir, findTemplate(name)); //path.join(frontendDir, 'frontendtemplate.ejs');
+    const templatePath = await findTemplate(name + '.ejs');//path.join(frontendDir, findTemplate(name)); //path.join(frontendDir, 'frontendtemplate.ejs');
 
 
 

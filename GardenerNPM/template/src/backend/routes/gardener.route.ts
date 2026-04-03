@@ -21,4 +21,4 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 
-router.route('/').get((req: Request, res: Response) => res.render('_'));
+router.route('/').get((req: Request, res: Response) => res.render('_', { fileName: '_' }));

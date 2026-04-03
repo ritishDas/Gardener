@@ -78,7 +78,7 @@ const pagebtns = gardener({
           const result = await fetch('/savetemplate', {
             method: 'POST',
             headers: { "Content-Type": 'application/json' },
-            body: JSON.stringify({ path: window.location.pathname })
+            body: JSON.stringify({ path: fetchElement('#fileName').innerText })
           });
 
           const data = await result.json(); // ✅ fix
