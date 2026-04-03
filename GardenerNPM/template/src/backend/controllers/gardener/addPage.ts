@@ -28,10 +28,12 @@ async function findTemplate(fileName: string) {
       // file does not exist → continue
     }
 
-    const lastUnderscore = fileName.lastIndexOf('_');
+    let lastUnderscore = fileName.lastIndexOf('_');
     if (lastUnderscore === -1) break;
 
-    fileName = fileName.substring(0, lastUnderscore + 1);
+    if (lastUnderscore === 0) lastUnderscore += 1;
+
+    fileName = fileName.substring(0, lastUnderscore);
     console.log(fileName);
   }
 
@@ -41,12 +43,12 @@ async function findTemplate(fileName: string) {
 
 export async function addPage(req: Request, res: Response) {
   try {
-    const name: string = req.body.page;
-    // const name = pagename.replaceAll('/', '_');
+    const pagename: string = req.body.page;
+    const name = pagename.replaceAll('/', '_');
 
 
 
-    const templatePath = await findTemplate(name + '.ejs');//path.join(frontendDir, findTemplate(name)); //path.join(frontendDir, 'frontendtemplate.ejs');
+    const templatePath = await findTemplate(name);//path.join(frontendDir, findTemplate(name)); //path.join(frontendDir, 'frontendtemplate.ejs');
 
 
 
@@ -61,7 +63,7 @@ export async function addPage(req: Request, res: Response) {
 
     await replaceLastOccurrence(viewPath, '<script', `<script src="/static/pages/pages.${name}.js" type='module'></script>`);
 
-    const routeEntry = `router.route("${pagename}").get((req: Request, res: Response) => res.render("${name}"));\n`;
+    const routeEntry = `router.route("${pagename}").get((req: Request, res: Response) => res.render("${name}",{fileName:"${name}"}));\n`;
     await fsp.appendFile(routePath, routeEntry, "utf8");
 
     await fsp.mkdir(jsDir, { recursive: true });

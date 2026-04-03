@@ -13,7 +13,7 @@ export async function saveTemplate(req: Request, res: Response) {
   try {
     const { path: reqPath } = req.body; // ✅ renamed
 
-    const name = reqPath.replaceAll("/", "_");
+    const name = reqPath;
 
     const sourceFile = path.join(frontendDir, 'views', `${name}.ejs`);
 
