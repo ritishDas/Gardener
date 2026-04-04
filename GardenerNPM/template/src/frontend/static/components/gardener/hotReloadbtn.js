@@ -5,8 +5,6 @@ const config = {
   hotreload: false
 }
 
-gardenerError('Something Went Wrong')
-
 let hotReload;
 let hotReloadtimeout;
 const localStore = localStorage.getItem('hotreload');

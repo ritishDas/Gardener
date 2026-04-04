@@ -29,11 +29,24 @@ export async function Fetch(
         body: JSON.stringify(body),
       });
 
-
+    if (!res.ok) {
+      throw new Error(`HTTP error! status: ${res.status}`);
+    }
 
     return res
   }
   catch (err) {
-    console.log(err)
+    console.error('Fetch Error:', err);
+    
+    // Import and display error using gardenerError
+    import('../gardener/errorBox.js')
+      .then(({ gardenerError }) => {
+        gardenerError(err.message || 'Network request failed');
+      })
+      .catch(() => {
+        console.error('Error component not available:', err.message);
+      });
+    
+    throw err;
   }
 }

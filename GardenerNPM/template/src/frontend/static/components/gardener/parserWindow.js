@@ -1,4 +1,6 @@
 import { gardener, fetchElement, appendElement } from '../../gardener.js'
+import { gardenerError } from './errorBox.js';
+
 const body = fetchElement('body');
 
 const config = {
@@ -17,7 +19,7 @@ export function parserWindow(text) {
         children: [
           {
             t: 'h3',
-            cn: ['font-bold'],
+            cn: ['font-bold', 'p-5'],
             txt: 'Parser Window'
           },
           {
@@ -88,7 +90,6 @@ function addComponentForm(text) {
 }
 
 async function addComponent(txt, path) {
-  // await navigator.clipboard.writeText(txt);
   try {
     const res = await fetch('/addcomponent', {
       method: 'POST',
@@ -98,13 +99,16 @@ async function addComponent(txt, path) {
       body: JSON.stringify({ component: generateFile(txt, path), path: `${config.componentdir}/${path}.js` })
     })
 
-    if (!res.ok) console.error('wrong');
+    if (!res.ok) {
+      throw new Error(`Failed to add component: ${res.status} ${res.statusText}`);
+    }
 
     const data = await res.json()
 
   }
   catch (err) {
-    console.error(err);
+    console.error('Add Component Error:', err);
+    gardenerError(err.message || 'Failed to add component');
   }
 
 }
