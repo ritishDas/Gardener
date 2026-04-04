@@ -1,9 +1,11 @@
 import { gardener, fetchElement, appendElement } from '../../gardener.js'
+import { gardenerError } from './errorBox.js';
 
 const config = {
   hotreload: false
 }
 
+gardenerError('Something Went Wrong')
 
 let hotReload;
 let hotReloadtimeout;
