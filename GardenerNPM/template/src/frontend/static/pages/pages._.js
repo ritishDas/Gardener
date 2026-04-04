@@ -5,7 +5,7 @@ import { gardener, fetchElement, replaceElement, appendElement } from "/static/g
 import { log, parser, addEl, State } from "/static/gardenerDev.js"
 
 
-pageloader();
+// pageloader();
 
 addEl('.copybtn', 'click', () => {
   try {
