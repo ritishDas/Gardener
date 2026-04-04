@@ -1,11 +1,7 @@
 import { copybtn } from "../components/copybtn.js";
-import { pageloader } from "../components/nonui/navigation.js";
 import addNotification from "../components/notification.js";
 import { gardener, fetchElement, replaceElement, appendElement } from "/static/gardener.js";
 import { log, parser, addEl, State } from "/static/gardenerDev.js"
-
-
-pageloader();
 
 addEl('.copybtn', 'click', () => {
   try {

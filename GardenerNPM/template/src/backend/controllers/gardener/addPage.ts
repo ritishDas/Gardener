@@ -13,32 +13,35 @@ const templateDir = path.join(frontendDir, 'template');
 
 
 async function findTemplate(fileName: string) {
-  while (fileName.length !== 0) {
+  try {
+    while (fileName.length !== 0) {
 
-    console.log(fileName)
-    const searchFile = `template.${fileName}.ejs`;
-    console.log(searchFile)
-    const searchPath = path.join(templateDir, searchFile);
+      console.log(fileName)
+      const searchFile = `template.${fileName}.ejs`;
+      console.log(searchFile)
+      const searchPath = path.join(templateDir, searchFile);
 
-    console.log(searchPath)
-    try {
-      await access(searchPath); // ✅ checks if file exists
-      return searchPath;        // return full path immediately
-    } catch {
-      // file does not exist → continue
+      console.log(searchPath)
+      try {
+        await access(searchPath); // ✅ checks if file exists
+        return searchPath;        // return full path immediately
+      } catch {
+        // file does not exist → continue
+      }
+
+      let lastUnderscore = fileName.lastIndexOf('_');
+      if (lastUnderscore === -1) break;
+
+      if (lastUnderscore === 0) lastUnderscore += 1;
+
+      fileName = fileName.substring(0, lastUnderscore);
+      console.log(fileName);
     }
-
-    let lastUnderscore = fileName.lastIndexOf('_');
-    if (lastUnderscore === -1) break;
-
-    if (lastUnderscore === 0) lastUnderscore += 1;
-
-    fileName = fileName.substring(0, lastUnderscore);
-    console.log(fileName);
   }
-
+  catch (error) {
+    throw new Error("Template not found");
+  }
   // ❗ explicit failure instead of silent bug
-  throw new Error("Template not found");
 }
 
 export async function addPage(req: Request, res: Response) {
@@ -50,6 +53,7 @@ export async function addPage(req: Request, res: Response) {
 
     const templatePath = await findTemplate(name);//path.join(frontendDir, findTemplate(name)); //path.join(frontendDir, 'frontendtemplate.ejs');
 
+    if (!templatePath) throw new Error('no template found');
 
 
 

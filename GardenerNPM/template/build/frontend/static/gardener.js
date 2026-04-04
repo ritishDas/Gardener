@@ -18,7 +18,7 @@ export function createElement(type, classname) {
 }
 
 export function insertText(element, text) {
-  element.textContent = text;
+  element.innerText = text;
 }
 
 export function replaceElement(original, New) {

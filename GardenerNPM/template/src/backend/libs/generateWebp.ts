@@ -11,8 +11,6 @@ export default async function generateWebP(
   const cacheDir = path.dirname(outputPath);
   await fsp.mkdir(cacheDir, { recursive: true });
 
-  console.log(`Processing image: ${inputPath}`);
-  console.log(`Output path: ${outputPath}`);
 
   await sharp(inputPath)
     .resize(width, height, {

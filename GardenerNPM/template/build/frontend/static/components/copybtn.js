@@ -1,25 +1,9 @@
 
 import { gardener, fetchElement, replaceElement } from '../gardener.js'
-import addNotification from './notification.js';
 
 export function copybtn() {
   return gardener({
     "t": "button",
-    events: {
-      click: () => {
-        try {
-          navigator.clipboard.writeText(fetchElement('.initCommand').innerText)
-          replaceElement('.copybtn', copybtn());
-          addNotification({ status: 'success', message: 'Copied' })
-        }
-        catch (err) {
-          addNotification({
-            status: 'failure', message: "Couldn't Copy"
-          });
-        }
-
-      }
-    },
     "cn": [
       "copybtn",
       "flex",
@@ -34,6 +18,9 @@ export function copybtn() {
       "duration-200",
       "active:scale-95"
     ],
+    "attr": {
+      "title": "Copy to clipboard"
+    },
     "children": [
       {
         "t": "span",

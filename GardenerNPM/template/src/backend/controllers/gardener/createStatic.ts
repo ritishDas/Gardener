@@ -35,6 +35,7 @@ export async function createStatic(req: Request, res: Response) {
       const html = await ejs.renderFile(
         inputPath,
         {
+          fileName: inputPath
         },
         {
           // async: true,
