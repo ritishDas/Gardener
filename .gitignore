@@ -2,5 +2,6 @@
 node_modules/
 # Cache
 .cache
-src/backend/cache
+src/frontend/static/cache
 .env
+build/
