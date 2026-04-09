@@ -1,0 +1,1 @@
+import '../static/global.js'; import '../static/pages/pages._new.js'; 

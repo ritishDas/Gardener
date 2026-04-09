@@ -119,7 +119,8 @@ gardener({
   <% if (process.env.NODE_ENV === 'production') { %>
     <script type='module' src='/static/bundle/bundle.<%=fileName%>.js'></script>
   <% } else { %>
+<script src="/static/pages/pages._new.js" type='module'></script>
     <script type='module' src='/static/global.js'></script>
-    <script type='module' src='/static/pages/pages._.js'></script>
+
   <% } %>
 </html>

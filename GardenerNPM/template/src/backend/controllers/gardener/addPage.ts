@@ -61,6 +61,7 @@ export async function addPage(req: Request, res: Response) {
     const routePath = path.resolve(__dirname, '..', '..', 'routes', 'gardener.route.ts');
     const jsDir = path.join(frontendDir, 'static/pages');
     const jsFilePath = path.join(jsDir, `pages.${name}.js`);
+    const bundleDir = path.join(frontendDir, 'bundle')
 
     const templateContent = await fsp.readFile(templatePath, 'utf8');
     await fsp.writeFile(viewPath, templateContent, "utf8");
@@ -71,8 +72,13 @@ export async function addPage(req: Request, res: Response) {
     await fsp.appendFile(routePath, routeEntry, "utf8");
 
     await fsp.mkdir(jsDir, { recursive: true });
-    const jsContent = 'import { gardener, fetchElement, replaceElement, appendElement } from "/static/gardener.js";\n import {log, parser, addEl, State} from "/static/gardenerDev.js"';
+    const jsContent = 'import { gardener, fetchElement, replaceElement, appendElement } from "../gardener.js";\n import {log, parser, addEl, State} from "../gardenerDev.js"';
     await fsp.writeFile(jsFilePath, jsContent, "utf8");
+
+    await fsp.mkdir(bundleDir, { recursive: true });
+    const bundleContent = `import '../static/global.js';import '../static/pages/pages.${name}.js'; `
+    await fsp.writeFile(path.join(bundleDir, `bundle.${name}.js`), bundleContent, "utf8");
+
 
     res.json({ success: true });
   } catch (err) {
