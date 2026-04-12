@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { Router } from "express";
 import { addComponent, addPage, imageOptimiser, saveTemplate } from "../controllers/gardener/index.js";
+import { hotReloadHandler } from "../controllers/gardener/hotReload.js";
 
 const router: Router = Router();
 export default router;
@@ -14,6 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
   router.route('/addcomponent').post(addComponent);
   router.route('/addpage').post(addPage);
   router.route('/savetemplate').post(saveTemplate);
+  router.route('/__gardener/hot-reload').get(hotReloadHandler);
 }
 
 

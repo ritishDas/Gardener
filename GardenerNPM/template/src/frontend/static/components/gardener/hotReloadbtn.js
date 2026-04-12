@@ -1,82 +1,29 @@
-import { gardener, fetchElement, appendElement } from '../../gardener.js'
-import { gardenerError } from './errorBox.js';
+const POLL_INTERVAL = 500;   // ms
+const ENDPOINT = '/__gardener/hot-reload';
 
-const config = {
-  hotreload: false
-}
+let knownVersion = null;
 
-let hotReload;
-let hotReloadtimeout;
-const localStore = localStorage.getItem('hotreload');
+async function poll() {
+  try {
+    const res = await fetch(ENDPOINT);
+    if (!res.ok) return;
+    const { version } = await res.json();
 
-if (localStore === null) hotReload = config.hotreload;
-else if (localStore === 'true') hotReload = true
-else if (localStore === 'false') hotReload = false
+    if (knownVersion === null) {
+      knownVersion = version;   // capture baseline on first poll
+      return;
+    }
 
-
-export function togglehotreload() {
-  const hr = hotReload;
-  const hrcheck = fetchElement('#hrcheckbox');
-
-  localStorage.setItem('hotreload', hr);
-
-  hotReload = !hotReload;
-
-  if (hr) {
-    hrcheck.style.background = '#66e666';
-    fetchElement('.hrcheckbox').checked = true;
-    localStorage.setItem('hotreload', 'true');
-    hotReloadtimeout = setTimeout(() => window.location.reload(), 1000);
+    if (version !== knownVersion) {
+      window.location.reload();
+    }
+  } catch {
+    // network hiccup — retry next tick
   }
-  else {
-    hrcheck.style.background = 'red';
-    fetchElement('.hrcheckbox').checked = false;
-    localStorage.setItem('hotreload', 'false');
-    clearTimeout(hotReloadtimeout);
-  }
-
-  //localStorage.setItem('hotreload', hotReload);
 }
 
-export function hotReloadBtn() {
-  return gardener({
-    t: 'p',
-    cn: ['bg-gray-200', 'fixed', 'bottom-0', 'z-100', 'right-0', 'border-b-1', 'p-2', 'rounded-md'],
-    children: [
-      {
-        t: 'span',
-        txt: 'Press '
-      },
-      {
-        t: 'span',
-        cn: ['text-green-500', 'font-bold'],
-        txt: 'Alt+h'
-      },
-      {
-        t: 'span',
-        txt: ' to toggle Hot Reload'
-      },
-      {
-        t: 'form',
-        attr: {
-          id: 'hrcheckbox',
-        },
-        events: {
-          click: () => togglehotreload()
-        },
-        cn: ['p-2', 'bg-red-300'],
-        children: [{
-          t: 'label',
-          txt: 'Hot Reload ',
-        }
-          , {
-          t: 'input',
-          cn: ['hrcheckbox'],
-          attr: {
-            type: 'checkbox'
-          }
-        }]
-      }
-    ]
-  })
+export function startHotReload() {
+  poll();   // immediate check
+  setInterval(poll, POLL_INTERVAL);
 }
+

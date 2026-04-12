@@ -2,7 +2,7 @@ import { mode } from './gardenerConfig.js'
 import { gardener, appendElement, fetchElement } from './gardener.js'
 import { addPagebtn } from './components/gardener/pageOverlayBtn.js';
 import { parserWindow as parserWindowComponent } from './components/gardener/parserWindow.js';
-import { hotReloadBtn, togglehotreload } from './components/gardener/hotReloadbtn.js';
+import { startHotReload } from './components/gardener/hotReloadbtn.js';
 import { gardenerError } from './components/gardener/errorBox.js';
 
 const body = fetchElement('body');
@@ -20,24 +20,8 @@ const body = fetchElement('body');
 
 if (mode === 'dev') {
   appendElement(body, addPagebtn);
-
-
-  appendElement(body, hotReloadBtn())
-
-  togglehotreload();
+  startHotReload();
 }
-
-
-
-
-document.addEventListener('keydown', function(e) {
-  // Detect Ctrl + H
-  if (e.altKey && e.key.toLowerCase() === 'h') {
-    e.preventDefault();   // Stop browser from opening history
-    // Your logic here...
-    togglehotreload();
-  }
-});
 
 
 
