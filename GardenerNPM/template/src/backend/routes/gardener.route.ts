@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express';
 import { Router } from "express";
-import { addComponent, addPage, imageOptimiser, saveTemplate } from "../controllers/gardener/index.js";
-import { hotReloadHandler } from "../controllers/gardener/hotReload.js";
+import { addComponent, addPage, imageOptimiser, saveTemplate, hotReloadHandler } from "../controllers/gardener/index.js";
 
 const router: Router = Router();
 export default router;

@@ -14,14 +14,14 @@ const watchTarget = path.resolve('src', 'frontend');
 let debounce: ReturnType<typeof setTimeout> | null = null;
 
 fs.watch(watchTarget, { recursive: true }, (_event, filename) => {
-    // Ignore hidden files and node_modules
-    if (!filename || filename.startsWith('.')) return;
+  // Ignore hidden files and node_modules
+  if (!filename || filename.startsWith('.')) return;
 
-    if (debounce) clearTimeout(debounce);
-    debounce = setTimeout(() => {
-        version = Date.now();
-        console.log(`[gardener] file changed: ${filename} → version ${version}`);
-    }, 100);
+  if (debounce) clearTimeout(debounce);
+  debounce = setTimeout(() => {
+    version = Date.now();
+    // console.log(`[gardener] file changed: ${filename} → version ${version}`);
+  }, 100);
 });
 
 console.log(`[gardener] watching ${watchTarget} for changes…`);
@@ -30,5 +30,5 @@ console.log(`[gardener] watching ${watchTarget} for changes…`);
 // GET /__gardener/hot-reload
 // Returns { version: <number> }
 export function hotReloadHandler(req: Request, res: Response) {
-    res.json({ version });
+  res.json({ version });
 }
