@@ -1,7 +1,9 @@
 // server.ts
+import type { Request, Response, NextFunction } from 'express';
 import 'dotenv/config';
 import express from 'express';
 import frontendRoute from './routes/gardener.route.js'
+
 import path from "path";
 
 const app = express();
@@ -25,9 +27,8 @@ app.use(express.static(staticFiles,
 app.use(express.json());
 app.use(frontendRoute);
 
-const PORT = process.env.PORT || 3000;
 
-app.use((err, req, res, next) => {
+app.use((err: Error & { status: number }, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
 
   res.status(err.status || 500).json({
@@ -36,6 +37,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log("server listening 🚀🚀🚀 PORT:", PORT);

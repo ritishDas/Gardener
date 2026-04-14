@@ -11,6 +11,7 @@ export default async function buildHelper() {
   } catch (err) {
     console.log(err);
   }
+
   await fs.cp(src, dest, { recursive: true });
 
   await fs.writeFile(
@@ -47,6 +48,13 @@ export default async function buildHelper() {
 
 
   await fs.rm(path.join(dest, 'bundle'), { recursive: true });
+  await fs.rm(path.join(dest, 'static', 'components'), { recursive: true });
+  await fs.rm(path.join(dest, 'static', 'pages'), { recursive: true });
+  await fs.rm(path.join(dest, 'static', 'gardener.js'), { recursive: true });
+  await fs.rm(path.join(dest, 'static', 'gardenerConfig.js'), { recursive: true });
+  await fs.rm(path.join(dest, 'static', 'gardenerDev.js'), { recursive: true });
+  await fs.rm(path.join(dest, 'static', 'global.js'), { recursive: true });
+
 
 }
 
