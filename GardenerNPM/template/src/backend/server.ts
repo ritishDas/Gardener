@@ -18,10 +18,11 @@ const staticFiles = path.resolve(__dirname, '..', 'frontend')
 app.set('views', path.join(staticFiles, 'views'));
 app.set("view engine", "ejs");
 app.use(express.static(staticFiles,
-  {
-    maxAge: '1y', // 1 year
-    immutable: true
-  }
+  // Uncomment this for caching in production
+  // {  
+  //   maxAge: '1y', // 1 year
+  //   immutable: true
+  // }
 ));
 
 app.use(express.json());
