@@ -3,6 +3,7 @@ import type { Request, Response, NextFunction } from 'express';
 import 'dotenv/config';
 import express from 'express';
 import frontendRoute from './routes/gardener.route.js'
+import todoRoute from './routes/todo.route.js'
 
 import path from "path";
 
@@ -26,6 +27,7 @@ app.use(express.static(staticFiles,
 ));
 
 app.use(express.json());
+app.use('/api/todos', todoRoute);
 app.use(frontendRoute);
 
 
