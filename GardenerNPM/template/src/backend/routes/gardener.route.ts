@@ -22,5 +22,5 @@ if (process.env.NODE_ENV !== 'production') {
 
 
 router.route('/').get((req: Request, res: Response) => res.render('_', { fileName: '_' }));
-router.route("hello").get((req: Request, res: Response) => res.render("hello", { fileName: "hello" }));
-router.route("/todos").get((req: Request, res: Response) => res.render("todos",{fileName:"todos"}));
+router.route("/settings").get((req: Request, res: Response) => res.render("_settings", { fileName: "_settings" }));
+
