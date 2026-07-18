@@ -28,7 +28,7 @@ Gardener focuses on:
 
 ## Example
 
-Define a component using JSON:
+Define a component 
 
 ```
 {
@@ -44,7 +44,7 @@ Define a component using JSON:
       "t": "button",
       "txt": "click",
       "events": {
-        "click": "() => console.log('button clicked')"
+        "click": () => console.log('button clicked')
       }
     }
   ]
