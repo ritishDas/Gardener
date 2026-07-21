@@ -3,6 +3,7 @@
 Gardener is a lightweight web framework built on top of Express and EJS. It enables building web applications without React or heavy frontend frameworks by using a DOM-first approach with reusable components.
 
 ---
+[![Watch the video](https://youtu.be/wtoXhMjrUnY?si=papPgSkBTLouaaiS)](https://youtu.be/wtoXhMjrUnY?si=papPgSkBTLouaaiS)
 
 ## What it does
 
